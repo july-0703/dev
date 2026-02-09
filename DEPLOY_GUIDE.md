@@ -2,13 +2,24 @@
 
 이 프로젝트는 정적 웹사이트(Static Website)로 구성되어 있어 Netlify를 통해 무료로 쉽게 배포할 수 있습니다.
 
-## 방법 1: Netlify Drop (가장 쉬움)
+## 방법 1: GitHub 연동 (추천 - 자동 배포)
+
+코드가 GitHub에 올라가 있다면 이 방법이 가장 좋습니다. 코드를 수정하고 푸시할 때마다 자동으로 배포됩니다.
+
+1. [Netlify](https://app.netlify.com/)에 로그인 후 **"Add new site"** > **"Import an existing project"** 클릭
+2. **GitHub** 선택 후 `july-0703/dev` 저장소 선택
+3. 설정 확인:
+   - **Base directory:** (비워둠)
+   - **Publish directory:** `landing-page`
+4. **Deploy Site** 버튼 클릭
+
+## 방법 2: Netlify Drop (간편)
 
 1. [Netlify Drop](https://app.netlify.com/drop) 사이트에 접속합니다.
 2. `e:\Web-Design\marketing_dev` 폴더를 통째로 브라우저 창에 드래그 앤 드롭합니다.
 3. 배포가 완료되면 제공된 URL로 접속하여 확인합니다.
 
-## 방법 2: Netlify CLI (터미널 사용)
+## 방법 3: Netlify CLI (터미널 사용)
 
 터미널에서 직접 배포하려면 다음 명령어를 실행하세요. (Netlify 계정이 필요합니다)
 
@@ -27,6 +38,17 @@
    netlify deploy --prod
    ```
    - *Publish directory*를 물어보면 `landing-page`라고 입력하거나, 이미 `netlify.toml`에 설정되어 있어 자동으로 감지될 수 있습니다.
+
+## 방법 4: Vercel 배포 (가장 빠름)
+
+Vercel은 한국에서도 속도가 빠르고 설정이 간편합니다.
+
+1. [Vercel](https://vercel.com/) 로그인 후 **"Add New..."** > **"Project"** 클릭
+2. GitHub의 `july-0703/dev` 저장소 **Import** 클릭
+3. **Configure Project** 화면에서:
+   - **Framework Preset:** Other
+   - **Root Directory:** `Edit` 버튼을 누르고 `landing-page` 폴더를 선택하세요. (중요!)
+4. **Deploy** 클릭
 
 ## 설정 정보
 
