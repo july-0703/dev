@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+    <title>Premium Tech Solutions | High-End Development</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="상상하는 모든 로직의 실현. 1%를 위한 하이엔드 솔루션 제작 전문 팀입니다. 카지노, 스포츠, 홀덤, 관리자 시스템 등 완벽한 비즈니스 파트너가 되어드립니다.">
+    <meta name="keywords" content="웹 솔루션, 하이엔드 개발, 카지노 솔루션, 스포츠 베팅 사이트, 홀덤 사이트 제작, 관리자 페이지, 프리미엄 개발팀">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph (KakaoTalk, Telegram, Facebook) -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://devteam.netlify.app/">
+    <meta property="og:title" content="Premium Tech Solutions | 1%를 위한 하이엔드 솔루션">
+    <meta property="og:description" content="트래픽이 곧 수익입니다. 멈추지 않는 엔진을 탑재하세요. 귀사의 성공을 위한 최고의 기술 파트너.">
+    <meta property="og:image" content="./favicon.svg">
+    <meta property="og:locale" content="ko_KR">
+    
+    <!-- Naver & Google Verification (Placeholders) -->
+    <meta name="naver-site-verification" content="" />
+    <meta name="google-site-verification" content="" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            gold: '#D4AF37',
+                            dark: '#0a0a0a',
+                            gray: '#1a1a1a',
+                            accent: '#FFD700'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Pretendard', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #050505; color: #ffffff; }
+        .gradient-text {
+            background: linear-gradient(to right, #D4AF37, #F2E8C4, #D4AF37);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 3s linear infinite;
+        }
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: #D4AF37;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px -10px rgba(212, 175, 55, 0.1);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-brand-dark/90 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold tracking-tighter text-white">
+                DEV<span class="text-brand-gold">.TEAM</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="#contact" class="px-6 py-2 bg-brand-gold text-black font-bold rounded-full hover:bg-white transition-colors" data-i18n="nav_contact">
+                    문의하기
+                </a>
+                <button id="lang-toggle" onclick="toggleLanguage()" class="text-white hover:text-brand-gold transition-colors font-bold border border-white/20 rounded-lg px-3 py-1 text-sm">
+                    EN
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <!-- Background Effect -->
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        <div class="absolute w-96 h-96 bg-brand-gold/20 rounded-full blur-3xl -top-20 -left-20 animate-pulse"></div>
+        <div class="absolute w-96 h-96 bg-purple-900/20 rounded-full blur-3xl bottom-0 right-0 animate-pulse"></div>
+
+        <div class="relative z-10 text-center px-6 max-w-5xl mx-auto mt-20">
+            <h2 class="text-brand-gold font-medium tracking-widest mb-4 uppercase text-sm">Premium Development Studio</h2>
+            <h1 class="text-5xl md:text-7xl font-black leading-tight mb-8">
+                <span data-i18n="hero_title_1"></span>상상하는 모든 로직의 실현</span><br>
+                <span class="gradient-text" data-i18n="hero_title_2">1%를 위한 하이엔드 솔루션</span>
+            </h1>
+            <p class="text-gray-400 text-lg md:text-xl mb-12 max-w-3xl mx-auto leading-relaxed">
+                <span data-i18n="hero_desc_1">트래픽이 곧 수익입니다. 멈추지 않는 엔진을 탑재하세요.</span><br>
+                <span data-i18n="hero_desc_2">단순 제작이 아닌, 귀사의 비즈니스를 성공시키는 <strong>기술 파트너</strong>가 되어드립니다.</span>
+            </p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <a href="#portfolio" class="px-8 py-4 border border-brand-gold text-brand-gold rounded-lg hover:bg-brand-gold hover:text-black transition-all font-bold" data-i18n="hero_btn_portfolio">
+                    포트폴리오 보기
+                </a>
+                <a href="#contact" class="px-8 py-4 bg-white text-black rounded-lg hover:bg-gray-200 transition-all font-bold" data-i18n="hero_btn_audit">
+                    무료 진단 신청
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-20 border-y border-white/5 bg-brand-gray">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+                <div class="text-4xl font-bold text-white mb-2">99.9%</div>
+                <div class="text-gray-500 text-sm" data-i18n="stats_uptime">서버 가동률 (Uptime)</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold text-white mb-2">0.5s</div>
+                <div class="text-gray-500 text-sm" data-i18n="stats_speed">평균 응답 속도</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold text-white mb-2">24/7</div>
+                <div class="text-gray-500 text-sm" data-i18n="stats_support">실시간 기술 지원</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold text-white mb-2">Secure</div>
+                <div class="text-gray-500 text-sm" data-i18n="stats_security">이중 암호화 데이터베이스</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-24 bg-brand-dark">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Our Masterpieces</h2>
+                <p class="text-gray-400" data-i18n="portfolio_desc">업종별 최적화된 고퀄리티 데모를 확인하세요.</p>
+            </div>
+
+            <!-- Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Portfolio Item 1 -->
+                <div class="glass-card rounded-xl overflow-hidden group">
+                    <div class="h-48 bg-gray-900 relative overflow-hidden">
+                        <iframe src="./demos/holdem/index.html" class="w-[400%] h-[400%] transform scale-[0.25] origin-top-left pointer-events-none border-0" tabindex="-1" scrolling="no"></iframe>
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                            <a href="./demos/holdem/index.html" target="_blank" class="px-4 py-2 bg-brand-gold text-black rounded-full text-sm hover:bg-white hover:text-black transition-colors font-bold">Live Demo</a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">Premium Hold'em</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="portfolio_holdem_desc">블랙 & 골드 테마의 럭셔리 포커 룸 디자인</p>
+                    </div>
+                </div>
+
+                <!-- Portfolio Item 2 -->
+                <div class="glass-card rounded-xl overflow-hidden group">
+                    <div class="h-48 bg-gray-900 relative overflow-hidden">
+                        <iframe src="./demos/sports/index.html" class="w-[400%] h-[400%] transform scale-[0.25] origin-top-left pointer-events-none border-0" tabindex="-1" scrolling="no"></iframe>
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                            <a href="./demos/sports/index.html" target="_blank" class="px-4 py-2 bg-brand-gold text-black rounded-full text-sm hover:bg-white hover:text-black transition-colors font-bold">Live Demo</a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">Live Sports</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="portfolio_sports_desc">실시간 배당률 변동에 최적화된 동적 UI</p>
+                    </div>
+                </div>
+
+                <!-- Portfolio Item 3 -->
+                <div class="glass-card rounded-xl overflow-hidden group">
+                    <div class="h-48 bg-gray-900 relative overflow-hidden">
+                        <iframe src="./demos/casino/index.html" class="w-[400%] h-[400%] transform scale-[0.25] origin-top-left pointer-events-none border-0" tabindex="-1" scrolling="no"></iframe>
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                            <a href="./demos/casino/index.html" target="_blank" class="px-4 py-2 bg-brand-gold text-black rounded-full text-sm hover:bg-white hover:text-black transition-colors font-bold">Live Demo</a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">Neon Slots</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="portfolio_casino_desc">화려한 이펙트와 높은 몰입도의 사이버펑크 스타일</p>
+                    </div>
+                </div>
+
+                <!-- Portfolio Item 4 -->
+                <div class="glass-card rounded-xl overflow-hidden group">
+                    <div class="h-48 bg-gray-900 relative overflow-hidden">
+                        <iframe src="./demos/vip-casino/index.html" class="w-[400%] h-[400%] transform scale-[0.25] origin-top-left pointer-events-none border-0" tabindex="-1" scrolling="no"></iframe>
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                            <a href="./demos/vip-casino/index.html" target="_blank" class="px-4 py-2 bg-brand-gold text-black rounded-full text-sm hover:bg-white hover:text-black transition-colors font-bold">Live Demo</a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">VIP Casino</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="portfolio_vip_desc">실제 카지노를 옮겨놓은 듯한 압도적 현장감</p>
+                    </div>
+                </div>
+
+                <!-- Portfolio Item 5 -->
+                <div class="glass-card rounded-xl overflow-hidden group">
+                    <div class="h-48 bg-gray-900 relative overflow-hidden">
+                        <iframe src="./demos/speed-minigame/index.html" class="w-[400%] h-[400%] transform scale-[0.25] origin-top-left pointer-events-none border-0" tabindex="-1" scrolling="no"></iframe>
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                            <a href="./demos/speed-minigame/index.html" target="_blank" class="px-4 py-2 bg-brand-gold text-black rounded-full text-sm hover:bg-white hover:text-black transition-colors font-bold">Live Demo</a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">Speed Mini-Games</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="portfolio_speed_desc">직관적이고 빠른 베팅을 위한 미니멀리즘 디자인</p>
+                    </div>
+                </div>
+
+                <!-- Portfolio Item 6 -->
+                <div class="glass-card rounded-xl overflow-hidden group">
+                    <div class="h-48 bg-gray-900 relative overflow-hidden">
+                        <iframe src="./demos/admin/index.html" class="w-[400%] h-[400%] transform scale-[0.25] origin-top-left pointer-events-none border-0" tabindex="-1" scrolling="no"></iframe>
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                            <a href="./demos/admin/index.html" target="_blank" class="px-4 py-2 bg-brand-gold text-black rounded-full text-sm hover:bg-white hover:text-black transition-colors font-bold">Live Demo</a>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">Admin System</h3>
+                        <p class="text-gray-400 text-sm" data-i18n="portfolio_admin_desc">모든 데이터를 한눈에 장악하는 통합 관제 시스템</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                 <p class="text-gray-500 mb-4" data-i18n="portfolio_more_text">더 많은 포트폴리오는 미팅 시 공개됩니다.</p>
+                 <button class="text-brand-gold border-b border-brand-gold pb-1 hover:text-white transition-colors" data-i18n="portfolio_more_btn">전체 포트폴리오 요청하기 &rarr;</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-brand-gold/5"></div>
+        <div class="max-w-4xl mx-auto px-6 relative z-10 text-center">
+            <h2 class="text-4xl font-bold mb-8">Ready to Scale Up?</h2>
+            <p class="text-gray-300 mb-12 text-lg">
+                <span data-i18n="contact_desc_1"></span>망설이는 순간에도 경쟁사는 앞서나가고 있습니다.</span><br>
+                <span data-i18n="contact_desc_2">지금 연락주시면 <span class="text-brand-gold font-bold">초기 세팅 비용 30% 할인</span> 혜택을 드립니다.</span>
+            </p>
+            
+            <div class="flex flex-col md:flex-row justify-center gap-6">
+                <a href="https://t.me/JZY_2023" class="flex items-center justify-center gap-3 px-8 py-5 bg-[#0088cc] rounded-lg hover:bg-[#0077b5] transition-colors w-full md:w-auto">
+                    <!-- Telegram Icon -->
+                    <svg class="w-6 h-6 fill-current text-white" viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                    <span class="text-white font-bold text-lg" data-i18n="contact_telegram">Telegram 문의하기</span>
+                </a>
+                
+                <a href="mailto:kimjuly0703@gmail.com" class="px-8 py-5 bg-gray-800 rounded-lg w-full md:w-auto flex flex-col justify-center items-center hover:bg-gray-700 transition-colors">
+                    <span class="text-xs text-gray-500 uppercase tracking-widest mb-1">Email Support</span>
+                    <span class="text-white font-bold">kimjuly0703@gmail.com</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-8 border-t border-white/5 text-center text-gray-600 text-sm">
+        <p data-i18n="footer_rights">&copy; 2024 Premium Tech Team. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const translations = {
+            ko: {
+                nav_contact: "문의하기",
+                hero_title_1: "상상하는 모든 로직의 실현",
+                hero_title_2: "1%를 위한 하이엔드 솔루션",
+                hero_desc_1: "트래픽이 곧 수익입니다. 멈추지 않는 엔진을 탑재하세요.",
+                hero_desc_2: "단순 제작이 아닌, 귀사의 비즈니스를 성공시키는 <strong>기술 파트너</strong>가 되어드립니다.",
+                hero_btn_portfolio: "포트폴리오 보기",
+                hero_btn_audit: "무료 진단 신청",
+                stats_uptime: "서버 가동률 (Uptime)",
+                stats_speed: "평균 응답 속도",
+                stats_support: "실시간 기술 지원",
+                stats_security: "이중 암호화 데이터베이스",
+                portfolio_desc: "업종별 최적화된 고퀄리티 데모를 확인하세요.",
+                portfolio_holdem_desc: "블랙 & 골드 테마의 럭셔리 포커 룸 디자인",
+                portfolio_sports_desc: "실시간 배당률 변동에 최적화된 동적 UI",
+                portfolio_casino_desc: "화려한 이펙트와 높은 몰입도의 사이버펑크 스타일",
+                portfolio_vip_desc: "실제 카지노를 옮겨놓은 듯한 압도적 현장감",
+                portfolio_speed_desc: "직관적이고 빠른 베팅을 위한 미니멀리즘 디자인",
+                portfolio_admin_desc: "모든 데이터를 한눈에 장악하는 통합 관제 시스템",
+                portfolio_more_text: "더 많은 포트폴리오는 미팅 시 공개됩니다.",
+                portfolio_more_btn: "전체 포트폴리오 요청하기 &rarr;",
+                contact_desc_1: "망설이는 순간에도 경쟁사는 앞서나가고 있습니다.",
+                contact_desc_2: "지금 연락주시면 <span class=\"text-brand-gold font-bold\">초기 세팅 비용 30% 할인</span> 혜택을 드립니다.",
+                contact_telegram: "Telegram 문의하기",
+                footer_rights: "&copy; 2024 Premium Tech Team. All rights reserved."
+            },
+            en: {
+                nav_contact: "Contact Us",
+                hero_title_1: "Realizing All Logic You Imagine",
+                hero_title_2: "High-End Solutions for the Top 1%",
+                hero_desc_1: "Traffic is revenue. Equip an engine that never stops.",
+                hero_desc_2: "We become your <strong>Technology Partner</strong> for business success, not just production.",
+                hero_btn_portfolio: "View Portfolio",
+                hero_btn_audit: "Free Audit Request",
+                stats_uptime: "Server Uptime",
+                stats_speed: "Avg. Response Time",
+                stats_support: "24/7 Tech Support",
+                stats_security: "Double Encrypted DB",
+                portfolio_desc: "Check out high-quality demos optimized for each industry.",
+                portfolio_holdem_desc: "Luxury Poker Room Design with Black & Gold Theme",
+                portfolio_sports_desc: "Dynamic UI Optimized for Real-Time Odds Changes",
+                portfolio_casino_desc: "Cyberpunk Style with Flashy Effects and High Immersion",
+                portfolio_vip_desc: "Overwhelming Realism like a Real Casino",
+                portfolio_speed_desc: "Minimalism Design for Intuitive and Fast Betting",
+                portfolio_admin_desc: "Integrated Control System to Master All Data at a Glance",
+                portfolio_more_text: "More portfolios will be revealed during the meeting.",
+                portfolio_more_btn: "Request Full Portfolio &rarr;",
+                contact_desc_1: "Competitors are moving ahead while you hesitate.",
+                contact_desc_2: "Contact us now for <span class=\"text-brand-gold font-bold\">30% OFF Initial Setup Cost</span>.",
+                contact_telegram: "Contact via Telegram",
+                footer_rights: "&copy; 2024 Premium Tech Team. All rights reserved."
+            }
+        };
+
+        function setLanguage(lang) {
+            localStorage.setItem('lang', lang);
+            document.documentElement.lang = lang;
+            
+            // Update Text
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+
+            // Update Button Text
+            const btn = document.getElementById('lang-toggle');
+            if(btn) btn.textContent = lang === 'ko' ? 'EN' : 'KR';
+
+            // Update Demo Links to include lang param
+            const demoLinks = document.querySelectorAll('a[href^="./demos/"]');
+            demoLinks.forEach(link => {
+                const url = new URL(link.href, window.location.origin);
+                url.searchParams.set('lang', lang);
+                link.href = url.toString();
+            });
+
+            // Update iframes source
+            const iframes = document.querySelectorAll('iframe');
+            iframes.forEach(iframe => {
+                try {
+                     const url = new URL(iframe.src, window.location.origin);
+                     // Only reload if lang changed to avoid flickers on init if already set
+                     if (url.searchParams.get('lang') !== lang) {
+                         url.searchParams.set('lang', lang);
+                         iframe.src = url.toString();
+                     }
+                } catch(e) {
+                    console.error(e);
+                }
+            });
+        }
+
+        function toggleLanguage() {
+            const currentLang = localStorage.getItem('lang') || 'ko';
+            const newLang = currentLang === 'ko' ? 'en' : 'ko';
+            setLanguage(newLang);
+        }
+
+        // Init
+        const savedLang = localStorage.getItem('lang') || 'ko';
+        setLanguage(savedLang);
+    </script>
+</body>
+</html>

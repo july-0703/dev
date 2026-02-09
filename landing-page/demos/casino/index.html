@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    <title>ROYAL CASINO | Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        casino: {
+                            bg: '#120f18',
+                            sidebar: '#1a1625',
+                            card: '#241e32',
+                            gold: '#ffd700',
+                            purple: '#9d4edd'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Lato', sans-serif; background-color: #120f18; color: #fff; }
+        h1, h2, .brand-font { font-family: 'Cinzel', serif; }
+        .jackpot-text {
+            background: linear-gradient(to bottom, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+        .slot-card:hover { transform: translateY(-5px); box-shadow: 0 0 20px rgba(157, 78, 221, 0.4); }
+        .slot-card:hover .play-btn { opacity: 1; transform: translateY(0); }
+
+        /* Ticker Animation */
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-marquee {
+            animation: marquee 30s linear infinite;
+        }
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        /* Floating Chat Pulse */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+        .chat-pulse::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: #ffd700;
+            border-radius: 50%;
+            z-index: -1;
+            animation: pulse-ring 2s infinite;
+        }
+        
+        /* Hide Scrollbar */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <!-- Top Bar -->
+    <header class="h-20 bg-casino-sidebar border-b border-white/5 flex items-center justify-between px-8 shrink-0 relative z-20">
+        <div class="flex items-center gap-12">
+            <div class="text-3xl font-black text-casino-gold brand-font tracking-widest cursor-pointer">ROYAL<span class="text-white">CASINO</span></div>
+            <nav class="hidden md:flex gap-8 text-sm font-bold text-gray-400">
+                <a href="#" class="text-white border-b-2 border-casino-gold pb-1" data-i18n="nav_slots">슬롯</a>
+                <a href="#" class="hover:text-white transition" data-i18n="nav_live">라이브 카지노</a>
+                <a href="#" class="hover:text-white transition" data-i18n="nav_promo">프로모션</a>
+                <a href="#" class="hover:text-white transition" data-i18n="nav_vip">VIP 클럽</a>
+                <a href="#" class="hover:text-white transition" data-i18n="nav_tournament">토너먼트</a>
+            </nav>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="flex flex-col items-end mr-4">
+                <span class="text-xs text-gray-400" data-i18n="header_balance">총 보유 자산</span>
+                <span class="text-xl font-bold text-casino-gold">₩ 128,450,000</span>
+            </div>
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-casino-gold to-orange-500 border-2 border-white cursor-pointer hover:scale-105 transition"></div>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        
+        <!-- Sidebar -->
+        <aside class="w-64 bg-casino-sidebar hidden lg:flex flex-col border-r border-white/5 py-6">
+            <div class="px-6 mb-8">
+                <button class="w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg font-bold text-sm shadow-lg hover:shadow-purple-500/50 transition transform hover:-translate-y-1" data-i18n="btn_deposit">충전하기</button>
+            </div>
+            
+            <div class="space-y-1 px-2">
+                <a href="#" class="flex items-center gap-4 px-4 py-3 bg-casino-card rounded-lg text-white font-bold border-l-4 border-casino-gold shadow-md">
+                    <span>🎰</span> <span data-i18n="menu_all">전체 게임</span>
+                </a>
+                <a href="#" class="flex items-center gap-4 px-4 py-3 hover:bg-white/5 rounded-lg text-gray-400 transition hover:text-white">
+                    <span>🔥</span> <span data-i18n="menu_popular">인기 게임</span>
+                </a>
+                <a href="#" class="flex items-center gap-4 px-4 py-3 hover:bg-white/5 rounded-lg text-gray-400 transition hover:text-white">
+                    <span>🆕</span> <span data-i18n="menu_new">신규 게임</span>
+                </a>
+                <a href="#" class="flex items-center gap-4 px-4 py-3 hover:bg-white/5 rounded-lg text-gray-400 transition hover:text-white">
+                    <span>💎</span> <span data-i18n="menu_jackpot">잭팟</span>
+                </a>
+                <a href="#" class="flex items-center gap-4 px-4 py-3 hover:bg-white/5 rounded-lg text-gray-400 transition hover:text-white">
+                    <span>❤️</span> <span data-i18n="menu_fav">즐겨찾기</span>
+                </a>
+                <div class="my-4 border-t border-white/5"></div>
+                <a href="#" class="flex items-center gap-4 px-4 py-3 hover:bg-white/5 rounded-lg text-gray-400 transition hover:text-white">
+                    <span>🃏</span> <span data-i18n="menu_table">테이블 게임</span>
+                </a>
+                <a href="#" class="flex items-center gap-4 px-4 py-3 hover:bg-white/5 rounded-lg text-gray-400 transition hover:text-white">
+                    <span>🎥</span> <span data-i18n="menu_live">라이브 딜러</span>
+                </a>
+            </div>
+
+            <!-- Provider List (Mini) -->
+            <div class="mt-auto px-6">
+                <p class="text-xs text-gray-500 font-bold mb-4 uppercase">Top Providers</p>
+                <div class="flex flex-wrap gap-2 opacity-50">
+                    <span class="bg-white/10 px-2 py-1 rounded text-[10px]">EVO</span>
+                    <span class="bg-white/10 px-2 py-1 rounded text-[10px]">PRAG</span>
+                    <span class="bg-white/10 px-2 py-1 rounded text-[10px]">HACK</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto relative no-scrollbar">
+            <!-- Hero Banner -->
+            <div class="h-96 relative flex items-center justify-center overflow-hidden">
+                <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1605870445919-838d190e8e1b?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-60"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-casino-bg via-casino-bg/50 to-transparent"></div>
+                
+                <!-- Jackpot Counter -->
+                <div class="relative z-10 text-center transform translate-y-[-20px]">
+                    <div class="text-gold font-bold tracking-widest text-sm mb-2 animate-pulse">MEGA PROGRESSIVE JACKPOT</div>
+                    <div class="text-6xl md:text-8xl font-black jackpot-text mb-4 brand-font" id="jackpot-counter">₩ 1,450,230,090</div>
+                    <p class="text-gray-200 mb-8 text-lg font-light tracking-wide">Win life-changing money right now with Royal Casino</p>
+                    <div class="flex gap-4 justify-center">
+                        <button class="px-10 py-4 bg-casino-gold text-black font-black rounded-full hover:scale-105 transition shadow-[0_0_30px_rgba(255,215,0,0.5)] uppercase tracking-wider">Play Now</button>
+                        <button class="px-10 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white font-bold rounded-full hover:bg-white/20 transition uppercase tracking-wider">Learn More</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Winners Ticker -->
+            <div class="bg-casino-card border-y border-white/5 h-12 flex items-center overflow-hidden relative">
+                <div class="absolute left-0 bg-casino-card z-10 px-4 h-full flex items-center font-bold text-casino-gold text-xs uppercase tracking-wider shadow-xl" data-i18n="ticker_winners">Recent Winners</div>
+                <div class="whitespace-nowrap animate-marquee flex items-center gap-12 pl-40">
+                    <div class="flex items-center gap-2"><span class="text-gray-400 text-sm">user***82</span> <span class="text-green-400 font-bold">₩ 5,200,000</span> <span class="text-xs text-gray-500">in Gates of Olympus</span></div>
+                    <div class="flex items-center gap-2"><span class="text-gray-400 text-sm">vip***99</span> <span class="text-green-400 font-bold">₩ 12,450,000</span> <span class="text-xs text-gray-500">in Lightning Roulette</span></div>
+                    <div class="flex items-center gap-2"><span class="text-gray-400 text-sm">kim***21</span> <span class="text-green-400 font-bold">₩ 880,000</span> <span class="text-xs text-gray-500">in Sweet Bonanza</span></div>
+                    <div class="flex items-center gap-2"><span class="text-gray-400 text-sm">lee***55</span> <span class="text-green-400 font-bold">₩ 2,100,000</span> <span class="text-xs text-gray-500">in Baccarat A</span></div>
+                    <div class="flex items-center gap-2"><span class="text-gray-400 text-sm">park***01</span> <span class="text-green-400 font-bold">₩ 54,000,000</span> <span class="text-xs text-gray-500">in Mega Moolah</span></div>
+                    <div class="flex items-center gap-2"><span class="text-gray-400 text-sm">choi***77</span> <span class="text-green-400 font-bold">₩ 1,200,000</span> <span class="text-xs text-gray-500">in Blackjack VIP</span></div>
+                    <div class="flex items-center gap-2"><span class="text-gray-400 text-sm">user***82</span> <span class="text-green-400 font-bold">₩ 5,200,000</span> <span class="text-xs text-gray-500">in Gates of Olympus</span></div>
+                    <div class="flex items-center gap-2"><span class="text-gray-400 text-sm">vip***99</span> <span class="text-green-400 font-bold">₩ 12,450,000</span> <span class="text-xs text-gray-500">in Lightning Roulette</span></div>
+                </div>
+            </div>
+
+            <!-- Game Grid -->
+            <div class="px-8 pb-20 mt-8 relative z-10">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2" data-i18n="title_popular">🔥 인기 슬롯 (Popular Slots)</h2>
+                    <a href="#" class="text-sm text-gray-400 hover:text-white" data-i18n="link_view_all">전체 보기 &rarr;</a>
+                </div>
+
+                <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                    <!-- Slot Item 1 -->
+                    <div class="aspect-[3/4] bg-gray-800 rounded-xl overflow-hidden relative group slot-card cursor-pointer border border-white/10">
+                        <img src="https://placehold.co/300x400/2a1b3d/FFD700.png?text=Gates+of\nOlympus" alt="Gates of Olympus" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 backdrop-blur-sm">
+                            <button class="play-btn opacity-0 transform translate-y-4 transition-all duration-300 w-12 h-12 rounded-full bg-casino-gold flex items-center justify-center text-black">▶</button>
+                            <span class="text-sm font-bold">Gates of Olympus</span>
+                        </div>
+                    </div>
+
+                    <!-- Slot Item 2 -->
+                    <div class="aspect-[3/4] bg-gray-800 rounded-xl overflow-hidden relative group slot-card cursor-pointer border border-white/10">
+                        <img src="https://placehold.co/300x400/3d1b25/FFD700.png?text=Sweet\nBonanza" alt="Sweet Bonanza" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 backdrop-blur-sm">
+                            <button class="play-btn opacity-0 transform translate-y-4 transition-all duration-300 w-12 h-12 rounded-full bg-casino-gold flex items-center justify-center text-black">▶</button>
+                            <span class="text-sm font-bold">Sweet Bonanza</span>
+                        </div>
+                    </div>
+
+                     <!-- Slot Item 3 -->
+                     <div class="aspect-[3/4] bg-gray-800 rounded-xl overflow-hidden relative group slot-card cursor-pointer border border-white/10">
+                        <img src="https://placehold.co/300x400/1b3d2f/FFD700.png?text=Wolf\nGold" alt="Wolf Gold" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 backdrop-blur-sm">
+                            <button class="play-btn opacity-0 transform translate-y-4 transition-all duration-300 w-12 h-12 rounded-full bg-casino-gold flex items-center justify-center text-black">▶</button>
+                            <span class="text-sm font-bold">Wolf Gold</span>
+                        </div>
+                    </div>
+
+                     <!-- Slot Item 4 -->
+                     <div class="aspect-[3/4] bg-gray-800 rounded-xl overflow-hidden relative group slot-card cursor-pointer border border-white/10">
+                        <img src="https://placehold.co/300x400/1b2a3d/FFD700.png?text=Book+of\nDead" alt="Book of Dead" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 backdrop-blur-sm">
+                            <button class="play-btn opacity-0 transform translate-y-4 transition-all duration-300 w-12 h-12 rounded-full bg-casino-gold flex items-center justify-center text-black">▶</button>
+                            <span class="text-sm font-bold">Book of Dead</span>
+                        </div>
+                    </div>
+
+                     <!-- Slot Item 5 -->
+                     <div class="aspect-[3/4] bg-gray-800 rounded-xl overflow-hidden relative group slot-card cursor-pointer border border-white/10">
+                        <img src="https://placehold.co/300x400/3d2e1b/FFD700.png?text=Starburst" alt="Starburst" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 backdrop-blur-sm">
+                            <button class="play-btn opacity-0 transform translate-y-4 transition-all duration-300 w-12 h-12 rounded-full bg-casino-gold flex items-center justify-center text-black">▶</button>
+                            <span class="text-sm font-bold">Starburst</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Slot Item 6 -->
+                    <div class="aspect-[3/4] bg-gray-800 rounded-xl overflow-hidden relative group slot-card cursor-pointer border border-white/10">
+                        <img src="https://placehold.co/300x400/3d1b36/FFD700.png?text=Sugar\nRush" alt="Sugar Rush" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 backdrop-blur-sm">
+                            <button class="play-btn opacity-0 transform translate-y-4 transition-all duration-300 w-12 h-12 rounded-full bg-casino-gold flex items-center justify-center text-black">▶</button>
+                            <span class="text-sm font-bold">Sugar Rush</span>
+                        </div>
+                    </div>
+
+                    <!-- Slot Item 7 -->
+                    <div class="aspect-[3/4] bg-gray-800 rounded-xl overflow-hidden relative group slot-card cursor-pointer border border-white/10">
+                        <img src="https://placehold.co/300x400/1b3d3d/FFD700.png?text=Big+Bass\nBonanza" alt="Big Bass Bonanza" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 backdrop-blur-sm">
+                            <button class="play-btn opacity-0 transform translate-y-4 transition-all duration-300 w-12 h-12 rounded-full bg-casino-gold flex items-center justify-center text-black">▶</button>
+                            <span class="text-sm font-bold">Big Bass Bonanza</span>
+                        </div>
+                    </div>
+
+                    <!-- Slot Item 8 -->
+                    <div class="aspect-[3/4] bg-gray-800 rounded-xl overflow-hidden relative group slot-card cursor-pointer border border-white/10">
+                        <img src="https://placehold.co/300x400/3d251b/FFD700.png?text=Gonzo's\nQuest" alt="Gonzo's Quest" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 backdrop-blur-sm">
+                            <button class="play-btn opacity-0 transform translate-y-4 transition-all duration-300 w-12 h-12 rounded-full bg-casino-gold flex items-center justify-center text-black">▶</button>
+                            <span class="text-sm font-bold">Gonzo's Quest</span>
+                        </div>
+                    </div>
+
+                    <!-- Slot Item 9 -->
+                    <div class="aspect-[3/4] bg-gray-800 rounded-xl overflow-hidden relative group slot-card cursor-pointer border border-white/10">
+                        <img src="https://placehold.co/300x400/252545/FFD700.png?text=The+Dog\nHouse" alt="The Dog House" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 backdrop-blur-sm">
+                            <button class="play-btn opacity-0 transform translate-y-4 transition-all duration-300 w-12 h-12 rounded-full bg-casino-gold flex items-center justify-center text-black">▶</button>
+                            <span class="text-sm font-bold">The Dog House</span>
+                        </div>
+                    </div>
+
+                    <!-- Slot Item 10 -->
+                    <div class="aspect-[3/4] bg-gray-800 rounded-xl overflow-hidden relative group slot-card cursor-pointer border border-white/10">
+                        <img src="https://placehold.co/300x400/1a1a1a/FFD700.png?text=Legacy\nof+Dead" alt="Legacy of Dead" class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 backdrop-blur-sm">
+                            <button class="play-btn opacity-0 transform translate-y-4 transition-all duration-300 w-12 h-12 rounded-full bg-casino-gold flex items-center justify-center text-black">▶</button>
+                            <span class="text-sm font-bold">Legacy of Dead</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Casino Section -->
+                <div class="flex items-center justify-between mb-6 mt-12">
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2" data-i18n="title_live">🎥 Live Dealers</h2>
+                    <a href="#" class="text-sm text-gray-400 hover:text-white" data-i18n="link_view_all_live">View All &rarr;</a>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-gray-800 rounded-xl overflow-hidden relative group cursor-pointer border border-white/10">
+                         <div class="h-40 bg-gray-700 flex items-center justify-center relative">
+                            <span class="text-white/30 font-bold">BACCARAT A</span>
+                            <div class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">LIVE</div>
+                         </div>
+                         <div class="p-4">
+                            <h3 class="font-bold">Speed Baccarat</h3>
+                            <p class="text-xs text-gray-400">Evolution Gaming</p>
+                         </div>
+                    </div>
+                     <div class="bg-gray-800 rounded-xl overflow-hidden relative group cursor-pointer border border-white/10">
+                         <div class="h-40 bg-gray-700 flex items-center justify-center relative">
+                            <span class="text-white/30 font-bold">ROULETTE</span>
+                            <div class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">LIVE</div>
+                         </div>
+                         <div class="p-4">
+                            <h3 class="font-bold">Lightning Roulette</h3>
+                            <p class="text-xs text-gray-400">Evolution Gaming</p>
+                         </div>
+                    </div>
+                    <div class="bg-gray-800 rounded-xl overflow-hidden relative group cursor-pointer border border-white/10">
+                         <div class="h-40 bg-gray-700 flex items-center justify-center relative">
+                            <span class="text-white/30 font-bold">BLACKJACK</span>
+                            <div class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">LIVE</div>
+                         </div>
+                         <div class="p-4">
+                            <h3 class="font-bold">Infinite Blackjack</h3>
+                            <p class="text-xs text-gray-400">Evolution Gaming</p>
+                         </div>
+                    </div>
+                    <div class="bg-gray-800 rounded-xl overflow-hidden relative group cursor-pointer border border-white/10">
+                         <div class="h-40 bg-gray-700 flex items-center justify-center relative">
+                            <span class="text-white/30 font-bold">GAME SHOW</span>
+                            <div class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">LIVE</div>
+                         </div>
+                         <div class="p-4">
+                            <h3 class="font-bold">Crazy Time</h3>
+                            <p class="text-xs text-gray-400">Evolution Gaming</p>
+                         </div>
+                    </div>
+                </div>
+
+                <!-- Promotions Banner -->
+                <div class="mt-12 mb-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gradient-to-r from-purple-900 to-indigo-900 rounded-xl p-6 flex items-center justify-between border border-white/10 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="relative z-10">
+                            <div class="text-xs font-bold text-casino-gold mb-1">WELCOME BONUS</div>
+                            <h3 class="text-xl font-bold text-white mb-2">100% First Deposit Match</h3>
+                            <p class="text-xs text-gray-300 mb-4">Up to ₩ 500,000 + 50 Free Spins</p>
+                            <button class="text-xs bg-white text-purple-900 font-bold px-4 py-2 rounded-full hover:bg-gray-200 transition">Claim Now</button>
+                        </div>
+                        <div class="text-6xl transform group-hover:scale-110 transition duration-300">🎁</div>
+                    </div>
+                    <div class="bg-gradient-to-r from-red-900 to-orange-900 rounded-xl p-6 flex items-center justify-between border border-white/10 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="relative z-10">
+                            <div class="text-xs font-bold text-casino-gold mb-1">VIP CASHBACK</div>
+                            <h3 class="text-xl font-bold text-white mb-2">Daily 5% Lossback</h3>
+                            <p class="text-xs text-gray-300 mb-4">No wagering requirements. Instant Payout.</p>
+                            <button class="text-xs bg-white text-red-900 font-bold px-4 py-2 rounded-full hover:bg-gray-200 transition">Join VIP</button>
+                        </div>
+                        <div class="text-6xl transform group-hover:scale-110 transition duration-300">👑</div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <footer class="mt-20 border-t border-white/5 pt-10 pb-6 text-gray-500 text-sm">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                        <div>
+                            <div class="text-xl font-black text-white mb-4 brand-font">ROYAL<span class="text-casino-gold">CASINO</span></div>
+                            <p class="mb-4">The world's leading premium online casino. Licensed and regulated.</p>
+                            <div class="flex gap-4 mt-4">
+                                <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 cursor-pointer">X</div>
+                                <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 cursor-pointer">I</div>
+                                <div class="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 cursor-pointer">F</div>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-4">Casino</h4>
+                            <ul class="space-y-2">
+                                <li class="hover:text-casino-gold cursor-pointer transition">Slots</li>
+                                <li class="hover:text-casino-gold cursor-pointer transition">Live Dealer</li>
+                                <li class="hover:text-casino-gold cursor-pointer transition">Table Games</li>
+                                <li class="hover:text-casino-gold cursor-pointer transition">VIP Level</li>
+                                <li class="hover:text-casino-gold cursor-pointer transition">Promotions</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-4">Support</h4>
+                            <ul class="space-y-2">
+                                <li class="hover:text-casino-gold cursor-pointer transition">Help Center</li>
+                                <li class="hover:text-casino-gold cursor-pointer transition">Live Chat</li>
+                                <li class="hover:text-casino-gold cursor-pointer transition">Fairness & RNG</li>
+                                <li class="hover:text-casino-gold cursor-pointer transition">Responsible Gaming</li>
+                                <li class="hover:text-casino-gold cursor-pointer transition">Contact Us</li>
+                            </ul>
+                        </div>
+                        <div>
+                             <h4 class="text-white font-bold mb-4">Payment Methods</h4>
+                             <div class="flex flex-wrap gap-2 opacity-50">
+                                 <div class="px-2 py-1 bg-white rounded text-[10px] font-bold text-black">VISA</div>
+                                 <div class="px-2 py-1 bg-white rounded text-[10px] font-bold text-black">MasterCard</div>
+                                 <div class="px-2 py-1 bg-white rounded text-[10px] font-bold text-black">Bitcoin</div>
+                                 <div class="px-2 py-1 bg-white rounded text-[10px] font-bold text-black">Ethereum</div>
+                                 <div class="px-2 py-1 bg-white rounded text-[10px] font-bold text-black">USDT</div>
+                             </div>
+                             <div class="mt-6">
+                                 <h4 class="text-white font-bold mb-2 text-xs uppercase">Security</h4>
+                                 <div class="flex items-center gap-2">
+                                     <div class="w-4 h-4 bg-green-500 rounded-full"></div>
+                                     <span class="text-xs">SSL Encrypted</span>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="text-center text-xs border-t border-white/5 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <p>&copy; 2024 Royal Casino. All rights reserved. 18+ Play Responsibly.</p>
+                        <div class="flex gap-4">
+                            <span class="cursor-pointer hover:text-white">Privacy Policy</span>
+                            <span class="cursor-pointer hover:text-white">Terms of Service</span>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </main>
+
+        <!-- Floating Chat Button -->
+        <div class="fixed bottom-6 right-6 z-50 chat-pulse">
+            <button class="w-14 h-14 bg-casino-gold rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition text-2xl text-black relative">
+                💬
+                <span class="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center font-bold border-2 border-casino-bg">1</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Simple Jackpot Counter Animation
+        const counter = document.getElementById('jackpot-counter');
+        let value = 1450230090;
+        
+        setInterval(() => {
+            value += Math.floor(Math.random() * 1000);
+            counter.innerText = '₩ ' + value.toLocaleString();
+        }, 100);
+
+        // Translation Script
+        const translations = {
+            ko: {
+                nav_slots: "슬롯",
+                nav_live: "라이브 카지노",
+                nav_promo: "프로모션",
+                nav_vip: "VIP 클럽",
+                nav_tournament: "토너먼트",
+                header_balance: "총 보유 자산",
+                btn_deposit: "충전하기",
+                menu_all: "전체 게임",
+                menu_popular: "인기 게임",
+                menu_new: "신규 게임",
+                menu_jackpot: "잭팟",
+                menu_fav: "즐겨찾기",
+                menu_table: "테이블 게임",
+                menu_live: "라이브 딜러",
+                ticker_winners: "최근 당첨자",
+                title_popular: "🔥 인기 슬롯 (Popular Slots)",
+                link_view_all: "전체 보기 →",
+                title_live: "🎥 라이브 딜러",
+                link_view_all_live: "전체 보기 →"
+            },
+            en: {
+                nav_slots: "Slots",
+                nav_live: "Live Casino",
+                nav_promo: "Promotions",
+                nav_vip: "VIP Club",
+                nav_tournament: "Tournaments",
+                header_balance: "Total Balance",
+                btn_deposit: "Deposit",
+                menu_all: "All Games",
+                menu_popular: "Popular Games",
+                menu_new: "New Games",
+                menu_jackpot: "Jackpots",
+                menu_fav: "Favorites",
+                menu_table: "Table Games",
+                menu_live: "Live Dealers",
+                ticker_winners: "Recent Winners",
+                title_popular: "🔥 Popular Slots",
+                link_view_all: "View All →",
+                title_live: "🎥 Live Dealers",
+                link_view_all_live: "View All →"
+            }
+        };
+
+        function setLanguage(lang) {
+            document.documentElement.lang = lang;
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        // Initialize from query param or localStorage
+        const urlParams = new URLSearchParams(window.location.search);
+        const langParam = urlParams.get('lang');
+        const savedLang = localStorage.getItem('lang') || 'ko';
+        const initialLang = langParam || savedLang;
+        
+        if (initialLang) {
+            setLanguage(initialLang);
+        }
+    </script>
+</body>
+</html>

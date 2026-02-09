@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    <title>LIVE SPORTS | Premium Demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sports: {
+                            bg: '#0f1114', /* Darker background */
+                            sidebar: '#1a1e23',
+                            card: '#23282f',
+                            accent: '#00ff5e',
+                            accentHover: '#00cc4b',
+                            text: '#e1e1e1',
+                            red: '#ff4d4d',
+                            blue: '#4d94ff'
+                        }
+                    },
+                    animation: {
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; background-color: #0f1114; color: #e1e1e1; }
+        h1, h2, h3, .font-oswald { font-family: 'Oswald', sans-serif; }
+        .odds-btn:hover { background-color: #3b434d; color: #fff; border-color: #555; }
+        .odds-btn.active { background-color: #00ff5e; color: #000; font-weight: bold; border-color: #00ff5e; box-shadow: 0 0 10px rgba(0, 255, 94, 0.3); }
+        .live-blink { animation: blink 1.5s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-marquee {
+            animation: marquee 30s linear infinite;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #1a1e23; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        .tracker-field {
+            background: 
+                linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                url('https://images.unsplash.com/photo-1522778119026-d647f0565c6a?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+    <!-- Header -->
+    <header class="h-16 bg-sports-sidebar border-b border-gray-800 flex items-center justify-between px-6 shrink-0 z-20">
+        <div class="flex items-center gap-6">
+            <div class="text-2xl font-black text-sports-accent italic tracking-tighter cursor-pointer">BET<span class="text-white">WIN</span></div>
+            <nav class="hidden lg:flex gap-1 text-sm font-bold text-gray-400">
+                <a href="#" class="text-white bg-white/10 px-4 py-2 rounded" data-i18n="nav_live">라이브</a>
+                <a href="#" class="hover:text-white hover:bg-white/5 px-4 py-2 rounded transition" data-i18n="nav_sports">스포츠</a>
+                <a href="../../demos/casino/index.html" class="hover:text-white hover:bg-white/5 px-4 py-2 rounded transition" data-i18n="nav_casino">카지노</a>
+                <a href="../../demos/holdem/index.html" class="hover:text-white hover:bg-white/5 px-4 py-2 rounded transition" data-i18n="nav_poker">포커</a>
+                <a href="#" class="hover:text-white hover:bg-white/5 px-4 py-2 rounded transition" data-i18n="nav_esports">E-스포츠</a>
+                <a href="#" class="hover:text-white hover:bg-white/5 px-4 py-2 rounded transition text-sports-accent" data-i18n="nav_promo">프로모션</a>
+            </nav>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3 bg-black/30 px-3 py-1.5 rounded border border-gray-700">
+                <div class="text-xs text-right hidden sm:block">
+                    <div class="text-gray-400 text-[10px] uppercase tracking-wider" data-i18n="label_balance">보유머니</div>
+                    <div class="text-white font-bold text-base">₩ 5,230,000</div>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-xs" data-i18n="label_member">회원</div>
+            </div>
+            <button class="bg-sports-accent text-black font-bold px-5 py-2 rounded hover:bg-sports-accentHover transition text-sm shadow-[0_0_15px_rgba(0,255,94,0.3)]" data-i18n="btn_recharge">충전하기</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="flex flex-1 overflow-hidden">
+        
+        <!-- Sidebar (Leagues) -->
+        <aside class="w-64 bg-sports-sidebar hidden md:flex flex-col border-r border-gray-800 overflow-y-auto">
+            
+            <!-- Search -->
+            <div class="p-4 border-b border-gray-800">
+                <div class="relative">
+                    <input type="text" data-i18n-placeholder="search_placeholder" placeholder="경기 검색..." class="w-full bg-black/30 border border-gray-700 rounded px-3 py-2 text-sm focus:border-sports-accent outline-none text-white">
+                    <svg class="w-4 h-4 text-gray-500 absolute right-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+            </div>
+
+            <!-- Popular -->
+            <div class="py-2">
+                <div class="px-4 py-2 text-xs font-bold text-sports-accent uppercase tracking-wider" data-i18n="title_popular_leagues">인기 리그</div>
+                <ul class="space-y-0.5">
+                    <li class="px-4 py-2.5 bg-sports-card/50 border-l-4 border-sports-accent flex justify-between items-center cursor-pointer hover:bg-sports-card transition group">
+                        <span class="font-bold text-white text-sm flex items-center gap-2 group-hover:text-sports-accent transition">
+                            <span>⚽</span> <span data-i18n="league_epl">프리미어 리그</span>
+                        </span>
+                        <span class="text-[10px] bg-sports-accent text-black px-1.5 py-0.5 rounded font-bold">12</span>
+                    </li>
+                    <li class="px-4 py-2.5 hover:bg-sports-card flex justify-between items-center cursor-pointer transition group border-l-4 border-transparent hover:border-gray-600">
+                        <span class="text-gray-300 text-sm flex items-center gap-2 group-hover:text-white transition">
+                            <span>⚽</span> <span data-i18n="league_laliga">라리가</span>
+                        </span>
+                        <span class="text-[10px] bg-gray-700 px-1.5 py-0.5 rounded text-gray-300">8</span>
+                    </li>
+                    <li class="px-4 py-2.5 hover:bg-sports-card flex justify-between items-center cursor-pointer transition group border-l-4 border-transparent hover:border-gray-600">
+                        <span class="text-gray-300 text-sm flex items-center gap-2 group-hover:text-white transition">
+                            <span>⚽</span> <span data-i18n="league_bundesliga">분데스리가</span>
+                        </span>
+                        <span class="text-[10px] bg-gray-700 px-1.5 py-0.5 rounded text-gray-300">5</span>
+                    </li>
+                    <li class="px-4 py-2.5 hover:bg-sports-card flex justify-between items-center cursor-pointer transition group border-l-4 border-transparent hover:border-gray-600">
+                        <span class="text-gray-300 text-sm flex items-center gap-2 group-hover:text-white transition">
+                            <span>🏀</span> <span data-i18n="league_nba">NBA</span>
+                        </span>
+                        <span class="text-[10px] bg-gray-700 px-1.5 py-0.5 rounded text-gray-300">3</span>
+                    </li>
+                    <li class="px-4 py-2.5 hover:bg-sports-card flex justify-between items-center cursor-pointer transition group border-l-4 border-transparent hover:border-gray-600">
+                        <span class="text-gray-300 text-sm flex items-center gap-2 group-hover:text-white transition">
+                            <span>⚾</span> <span data-i18n="league_mlb">MLB</span>
+                        </span>
+                        <span class="text-[10px] bg-gray-700 px-1.5 py-0.5 rounded text-gray-300">6</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- All Sports -->
+            <div class="py-2 border-t border-gray-800">
+                <div class="px-4 py-2 text-xs font-bold text-gray-500 uppercase tracking-wider" data-i18n="title_all_sports">전체 종목</div>
+                <ul class="space-y-0.5">
+                    <li class="px-4 py-2 hover:bg-sports-card flex justify-between items-center cursor-pointer transition">
+                        <span class="text-gray-400 text-sm flex items-center gap-2">🎾 <span data-i18n="sport_tennis">테니스</span></span>
+                        <span class="text-[10px] text-gray-600">24</span>
+                    </li>
+                    <li class="px-4 py-2 hover:bg-sports-card flex justify-between items-center cursor-pointer transition">
+                        <span class="text-gray-400 text-sm flex items-center gap-2">🎮 <span data-i18n="sport_esports">E-스포츠</span></span>
+                        <span class="text-[10px] text-gray-600">18</span>
+                    </li>
+                    <li class="px-4 py-2 hover:bg-sports-card flex justify-between items-center cursor-pointer transition">
+                        <span class="text-gray-400 text-sm flex items-center gap-2">🏐 <span data-i18n="sport_volleyball">배구</span></span>
+                        <span class="text-[10px] text-gray-600">4</span>
+                    </li>
+                    <li class="px-4 py-2 hover:bg-sports-card flex justify-between items-center cursor-pointer transition">
+                        <span class="text-gray-400 text-sm flex items-center gap-2">🏓 <span data-i18n="sport_pingpong">탁구</span></span>
+                        <span class="text-[10px] text-gray-600">12</span>
+                    </li>
+                    <li class="px-4 py-2 hover:bg-sports-card flex justify-between items-center cursor-pointer transition">
+                        <span class="text-gray-400 text-sm flex items-center gap-2">🥊 <span data-i18n="sport_mma">MMA/UFC</span></span>
+                        <span class="text-[10px] text-gray-600">2</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Support Banner -->
+            <div class="mt-auto p-4">
+                <div class="bg-gradient-to-br from-gray-800 to-black rounded-lg p-3 border border-gray-700 text-center">
+                    <div class="text-xs text-gray-400 mb-1" data-i18n="support_24h">24시간 고객센터</div>
+                    <div class="text-sports-accent font-bold" data-i18n="support_live">실시간 상담</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Center Content -->
+        <main class="flex-1 overflow-y-auto relative bg-sports-bg">
+            
+            <!-- Live Ticker -->
+            <div class="bg-sports-card border-b border-gray-800 h-8 flex items-center overflow-hidden">
+                <div class="bg-sports-accent text-black text-xs font-bold px-3 h-full flex items-center z-10" data-i18n="ticker_live">실시간 중계</div>
+                <div class="flex-1 relative h-full">
+                    <div class="absolute w-full animate-marquee whitespace-nowrap text-xs text-gray-400 flex items-center gap-8 h-full">
+                        <span class="flex items-center gap-1">⚽ <span class="text-white font-bold" data-i18n="ticker_goal">골!</span> 맨시티 2-1 리버풀 (73')</span>
+                        <span class="flex items-center gap-1">🎾 <span class="text-sports-accent" data-i18n="ticker_set_end">세트 종료:</span> 나달 2세트 승리 6-4</span>
+                        <span class="flex items-center gap-1">🏀 <span class="text-white font-bold" data-i18n="ticker_3pt">3점슛 성공!</span> 커리 (GSW) - 102:98</span>
+                        <span class="flex items-center gap-1">💰 <span class="text-yellow-400" data-i18n="ticker_jackpot">대박 당첨!</span> User77**님 5폴더 적중 ₩1,240,000</span>
+                        <span class="flex items-center gap-1">⚽ <span class="text-red-500" data-i18n="ticker_red_card">퇴장!</span> 라모스 (세비야) - 88'</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 md:p-6 max-w-7xl mx-auto">
+                
+                <!-- Hero Banner Slider -->
+                <div class="w-full h-80 rounded-xl mb-6 relative overflow-hidden shadow-2xl group">
+                    <!-- Background Image -->
+                    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=2605&auto=format&fit=crop')] bg-cover bg-center transition duration-1000 transform group-hover:scale-105"></div>
+                    
+                    <!-- Gradient Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent"></div>
+                    
+                    <div class="relative z-10 h-full flex flex-col justify-center px-8 md:px-12 max-w-2xl">
+                        <div class="text-sports-accent font-bold mb-3 flex items-center gap-2 text-sm uppercase tracking-wider animate-pulse">
+                            <span class="w-2 h-2 rounded-full bg-red-500"></span> <span data-i18n="hero_live_now">Live Now</span>
+                        </div>
+                        <h2 class="text-5xl md:text-6xl font-black text-white mb-2 italic uppercase leading-none drop-shadow-lg">
+                            Premier League<br>
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-sports-accent to-white" data-i18n="hero_title_suffix">SUPER SUNDAY</span>
+                        </h2>
+                        <p class="text-gray-200 text-lg mb-8 font-medium drop-shadow-md" data-i18n="hero_desc">
+                            맨시티 vs 리버풀. 우승을 향한 결정적 승부.<br>
+                            홀란드 선취골 득점 시 <span class="text-sports-accent">배당률 5.00 부스트</span> 제공!
+                        </p>
+                        <div class="flex gap-4">
+                            <button class="bg-sports-accent text-black font-bold px-8 py-3 rounded hover:bg-white transition text-base uppercase tracking-wider shadow-[0_0_20px_rgba(0,255,94,0.4)] hover:shadow-[0_0_30px_rgba(255,255,255,0.6)] transform hover:-translate-y-1" data-i18n="btn_bet_now">
+                                베팅하기
+                            </button>
+                            <button class="bg-white/10 text-white font-bold px-8 py-3 rounded hover:bg-white/20 transition text-base uppercase backdrop-blur-md border border-white/20" data-i18n="btn_view_odds">
+                                배당 보기
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Slider Dots -->
+                    <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-3 z-20">
+                        <div class="w-12 h-1.5 bg-sports-accent rounded-full cursor-pointer"></div>
+                        <div class="w-3 h-1.5 bg-gray-600 rounded-full hover:bg-gray-400 transition cursor-pointer"></div>
+                        <div class="w-3 h-1.5 bg-gray-600 rounded-full hover:bg-gray-400 transition cursor-pointer"></div>
+                    </div>
+                </div>
+
+                <!-- Match Tracker & Stats (Visual Enhancement) -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Live Visualizer -->
+                    <div class="lg:col-span-2 bg-sports-card rounded-xl border border-gray-700 overflow-hidden flex flex-col">
+                        <div class="bg-black/40 px-4 py-2 flex justify-between items-center border-b border-gray-700">
+                            <span class="text-xs font-bold text-gray-400 flex items-center gap-2"><span class="w-1.5 h-1.5 bg-red-500 rounded-full live-blink"></span> <span data-i18n="tracker_analysis">경기 분석</span></span>
+                            <span class="text-xs text-sports-accent cursor-pointer hover:underline" data-i18n="tracker_records">기록 보기</span>
+                        </div>
+                        <div class="flex-1 relative tracker-field min-h-[200px] flex items-center justify-center">
+                            <div class="absolute inset-0 bg-black/50"></div>
+                            <!-- Simulated Action -->
+                            <div class="relative z-10 text-center">
+                                <div class="inline-block bg-black/80 backdrop-blur border border-sports-accent/50 px-6 py-3 rounded-lg mb-2">
+                                    <div class="text-sports-accent font-bold text-sm uppercase tracking-widest mb-1" data-i18n="tracker_attack">위험한 공격</div>
+                                    <div class="text-white font-bold">Man City</div>
+                                </div>
+                                <div class="flex justify-center gap-8 text-xs font-bold text-white mt-4">
+                                    <div class="text-center">
+                                        <div class="text-yellow-400 text-lg">4</div>
+                                        <div class="text-gray-400" data-i18n="tracker_corner">코너킥</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-red-500 text-lg">1</div>
+                                        <div class="text-gray-400" data-i18n="tracker_red_card">레드카드</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-sports-accent text-lg">56%</div>
+                                        <div class="text-gray-400" data-i18n="tracker_possession">점유율</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Promo Box -->
+                    <div class="bg-gradient-to-br from-indigo-900 to-purple-900 rounded-xl p-6 border border-white/10 relative overflow-hidden flex flex-col justify-center">
+                        <div class="absolute top-0 right-0 p-4 opacity-10">
+                            <svg class="w-32 h-32 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg>
+                        </div>
+                        <div class="relative z-10">
+                            <span class="bg-yellow-400 text-black text-[10px] font-bold px-2 py-0.5 rounded uppercase" data-i18n="promo_tag">한정 이벤트</span>
+                            <h3 class="text-2xl font-black text-white mt-2 mb-1" data-i18n="promo_title">다폴더<br>보너스</h3>
+                            <p class="text-indigo-200 text-xs mb-4" data-i18n="promo_desc">다폴더 베팅 시 최대 70% 추가 배당 지급!</p>
+                            <button class="w-full bg-white text-indigo-900 font-bold py-2 rounded text-sm hover:bg-indigo-50 transition" data-i18n="btn_get_bonus">보너스 받기</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-oswald font-bold text-white italic" data-i18n="title_live_matches">진행 중인 경기</h3>
+                    <div class="flex gap-2 bg-black/30 p-1 rounded-lg">
+                        <button class="bg-sports-card text-white px-4 py-1.5 rounded text-xs font-bold border border-sports-accent shadow-lg" data-i18n="btn_filter_soccer">축구</button>
+                        <button class="text-gray-400 px-4 py-1.5 rounded text-xs font-bold hover:bg-sports-card hover:text-white transition" data-i18n="btn_filter_basketball">농구</button>
+                        <button class="text-gray-400 px-4 py-1.5 rounded text-xs font-bold hover:bg-sports-card hover:text-white transition" data-i18n="btn_filter_tennis">테니스</button>
+                        <button class="text-gray-400 px-4 py-1.5 rounded text-xs font-bold hover:bg-sports-card hover:text-white transition" data-i18n="btn_filter_esports">E-스포츠</button>
+                    </div>
+                </div>
+
+                <!-- Match List Container -->
+                <div class="space-y-3">
+
+                    <!-- Match Card 1 -->
+                    <div class="bg-sports-card rounded-lg p-4 border border-gray-700 hover:border-gray-500 transition group relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-red-500"></div> <!-- Live Indicator Line -->
+                        <div class="flex flex-col md:flex-row gap-4 items-center relative z-10">
+                            
+                            <!-- Match Info -->
+                            <div class="flex-1 w-full">
+                                <div class="flex justify-between text-xs text-gray-400 mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-red-500 font-bold flex items-center gap-1 animate-pulse"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> 74'</span>
+                                        <span class="text-gray-500">|</span>
+                                        <span data-i18n="league_epl">프리미어 리그</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sports-accent cursor-pointer hover:text-white transition">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                                        <span data-i18n="label_stats">통계</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between px-2">
+                                    <div class="flex items-center gap-3 w-1/3">
+                                        <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-[10px] font-bold text-gray-300">MC</div>
+                                        <span class="font-bold text-white text-lg" data-i18n="team_man_city">맨시티</span>
+                                    </div>
+                                    <div class="text-center font-mono text-2xl font-black text-sports-accent w-1/3 tracking-widest bg-black/20 rounded py-1">
+                                        2 - 1
+                                    </div>
+                                    <div class="flex items-center gap-3 w-1/3 justify-end">
+                                        <span class="font-bold text-white text-lg" data-i18n="team_liverpool">리버풀</span>
+                                        <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-[10px] font-bold text-gray-300">LIV</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Odds -->
+                            <div class="flex gap-1 w-full md:w-auto shrink-0">
+                                <button class="odds-btn w-full md:w-20 bg-sports-sidebar border border-gray-600 rounded p-1.5 text-center transition flex flex-col items-center justify-center gap-0.5 group/btn" onclick="toggleBet(this)">
+                                    <div class="text-[10px] text-gray-500 group-hover/btn:text-gray-300" data-i18n="label_win">승</div>
+                                    <div class="font-bold text-sports-accent text-sm">1.85</div>
+                                </button>
+                                <button class="odds-btn w-full md:w-20 bg-sports-sidebar border border-gray-600 rounded p-1.5 text-center transition flex flex-col items-center justify-center gap-0.5 group/btn" onclick="toggleBet(this)">
+                                    <div class="text-[10px] text-gray-500 group-hover/btn:text-gray-300" data-i18n="label_draw">무</div>
+                                    <div class="font-bold text-sports-accent text-sm">3.40</div>
+                                </button>
+                                <button class="odds-btn w-full md:w-20 bg-sports-sidebar border border-gray-600 rounded p-1.5 text-center transition flex flex-col items-center justify-center gap-0.5 group/btn" onclick="toggleBet(this)">
+                                    <div class="text-[10px] text-gray-500 group-hover/btn:text-gray-300" data-i18n="label_loss">패</div>
+                                    <div class="font-bold text-sports-accent text-sm">4.20</div>
+                                </button>
+                            </div>
+                            
+                            <!-- More -->
+                            <div class="hidden md:block text-xs text-gray-500 text-right w-12 cursor-pointer hover:text-white transition">
+                                +124<br><span data-i18n="label_more">더보기</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Match Card 2 -->
+                    <div class="bg-sports-card rounded-lg p-4 border border-gray-700 hover:border-gray-500 transition group relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-red-500"></div>
+                        <div class="flex flex-col md:flex-row gap-4 items-center relative z-10">
+                            <div class="flex-1 w-full">
+                                <div class="flex justify-between text-xs text-gray-400 mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-red-500 font-bold flex items-center gap-1 animate-pulse"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> 26'</span>
+                                        <span class="text-gray-500">|</span>
+                                        <span data-i18n="league_laliga">라리가</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sports-accent cursor-pointer hover:text-white transition">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                                        <span data-i18n="label_stats">통계</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between px-2">
+                                    <div class="flex items-center gap-3 w-1/3">
+                                        <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-[10px] font-bold text-gray-300">RM</div>
+                                        <span class="font-bold text-white text-lg" data-i18n="team_real_madrid">레알 마드리드</span>
+                                    </div>
+                                    <div class="text-center font-mono text-2xl font-black text-sports-accent w-1/3 tracking-widest bg-black/20 rounded py-1">
+                                        0 - 0
+                                    </div>
+                                    <div class="flex items-center gap-3 w-1/3 justify-end">
+                                        <span class="font-bold text-white text-lg" data-i18n="team_barcelona">바르셀로나</span>
+                                        <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-[10px] font-bold text-gray-300">FCB</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-1 w-full md:w-auto shrink-0">
+                                <button class="odds-btn w-full md:w-20 bg-sports-sidebar border border-gray-600 rounded p-1.5 text-center transition flex flex-col items-center justify-center gap-0.5 group/btn" onclick="toggleBet(this)">
+                                    <div class="text-[10px] text-gray-500 group-hover/btn:text-gray-300" data-i18n="label_win">승</div>
+                                    <div class="font-bold text-sports-accent text-sm">2.10</div>
+                                </button>
+                                <button class="odds-btn w-full md:w-20 bg-sports-sidebar border border-gray-600 rounded p-1.5 text-center transition flex flex-col items-center justify-center gap-0.5 group/btn" onclick="toggleBet(this)">
+                                    <div class="text-[10px] text-gray-500 group-hover/btn:text-gray-300" data-i18n="label_draw">무</div>
+                                    <div class="font-bold text-sports-accent text-sm">3.10</div>
+                                </button>
+                                <button class="odds-btn w-full md:w-20 bg-sports-sidebar border border-gray-600 rounded p-1.5 text-center transition flex flex-col items-center justify-center gap-0.5 group/btn" onclick="toggleBet(this)">
+                                    <div class="text-[10px] text-gray-500 group-hover/btn:text-gray-300" data-i18n="label_loss">패</div>
+                                    <div class="font-bold text-sports-accent text-sm">2.95</div>
+                                </button>
+                            </div>
+                            <div class="hidden md:block text-xs text-gray-500 text-right w-12 cursor-pointer hover:text-white transition">+89<br><span data-i18n="label_more">더보기</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Match Card 3 (Basketball) -->
+                    <div class="bg-sports-card rounded-lg p-4 border border-gray-700 hover:border-gray-500 transition group relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-red-500"></div>
+                        <div class="flex flex-col md:flex-row gap-4 items-center relative z-10">
+                            <div class="flex-1 w-full">
+                                <div class="flex justify-between text-xs text-gray-400 mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-red-500 font-bold flex items-center gap-1 animate-pulse"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Q4 02:14</span>
+                                        <span class="text-gray-500">|</span>
+                                        <span data-i18n="league_nba">NBA</span>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-sports-accent cursor-pointer hover:text-white transition">
+                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                                        <span data-i18n="label_stats">통계</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between px-2">
+                                    <div class="flex items-center gap-3 w-1/3">
+                                        <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-[10px] font-bold text-gray-300">GSW</div>
+                                        <span class="font-bold text-white text-lg" data-i18n="team_warriors">워리어스</span>
+                                    </div>
+                                    <div class="text-center font-mono text-2xl font-black text-sports-accent w-1/3 tracking-widest bg-black/20 rounded py-1">
+                                        108 - 105
+                                    </div>
+                                    <div class="flex items-center gap-3 w-1/3 justify-end">
+                                        <span class="font-bold text-white text-lg" data-i18n="team_lakers">레이커스</span>
+                                        <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-[10px] font-bold text-gray-300">LAL</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-1 w-full md:w-auto shrink-0">
+                                <button class="odds-btn w-full md:w-20 bg-sports-sidebar border border-gray-600 rounded p-1.5 text-center transition flex flex-col items-center justify-center gap-0.5 group/btn" onclick="toggleBet(this)">
+                                    <div class="text-[10px] text-gray-500 group-hover/btn:text-gray-300" data-i18n="label_win">승</div>
+                                    <div class="font-bold text-sports-accent text-sm">1.45</div>
+                                </button>
+                                <button class="odds-btn w-full md:w-20 bg-sports-sidebar border border-gray-600 rounded p-1.5 text-center transition flex flex-col items-center justify-center gap-0.5 group/btn bg-gray-800/50 opacity-50 cursor-not-allowed">
+                                    <div class="text-[10px] text-gray-500" data-i18n="label_draw">무</div>
+                                    <div class="font-bold text-gray-500 text-sm">-</div>
+                                </button>
+                                <button class="odds-btn w-full md:w-20 bg-sports-sidebar border border-gray-600 rounded p-1.5 text-center transition flex flex-col items-center justify-center gap-0.5 group/btn" onclick="toggleBet(this)">
+                                    <div class="text-[10px] text-gray-500 group-hover/btn:text-gray-300" data-i18n="label_loss">패</div>
+                                    <div class="font-bold text-sports-accent text-sm">2.75</div>
+                                </button>
+                            </div>
+                            <div class="hidden md:block text-xs text-gray-500 text-right w-12 cursor-pointer hover:text-white transition">+42<br><span data-i18n="label_more">더보기</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Section Header -->
+                    <div class="pt-4 pb-2">
+                        <h3 class="text-xl font-oswald font-bold text-white italic" data-i18n="title_upcoming">주요 경기 일정</h3>
+                    </div>
+
+                    <!-- Upcoming Match 1 -->
+                    <div class="bg-sports-card rounded-lg p-4 border border-gray-700 hover:border-gray-500 transition group relative">
+                         <div class="flex flex-col md:flex-row gap-4 items-center relative z-10">
+                            <div class="flex-1 w-full">
+                                <div class="flex justify-between text-xs text-gray-400 mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-gray-300 font-bold" data-i18n="time_tomorrow_0400">내일 04:00</span>
+                                        <span class="text-gray-500">|</span>
+                                        <span data-i18n="league_champions">챔피언스 리그</span>
+                                    </div>
+                                    <div data-i18n="label_betting_options">+215 베팅 옵션</div>
+                                </div>
+                                <div class="flex items-center justify-between px-2">
+                                    <div class="flex items-center gap-3 w-1/3">
+                                        <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-[10px] font-bold text-gray-300">PSG</div>
+                                        <span class="font-bold text-white text-lg" data-i18n="team_psg">파리 생제르맹</span>
+                                    </div>
+                                    <div class="text-center font-mono text-xl font-bold text-gray-500 w-1/3 bg-black/20 rounded py-1">
+                                        VS
+                                    </div>
+                                    <div class="flex items-center gap-3 w-1/3 justify-end">
+                                        <span class="font-bold text-white text-lg" data-i18n="team_bayern">바이에른 뮌헨</span>
+                                        <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-[10px] font-bold text-gray-300">BAY</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex gap-1 w-full md:w-auto shrink-0">
+                                <button class="odds-btn w-full md:w-20 bg-sports-sidebar border border-gray-600 rounded p-1.5 text-center transition flex flex-col items-center justify-center gap-0.5 group/btn" onclick="toggleBet(this)">
+                                    <div class="text-[10px] text-gray-500 group-hover/btn:text-gray-300" data-i18n="label_win">승</div>
+                                    <div class="font-bold text-sports-accent text-sm">2.45</div>
+                                </button>
+                                <button class="odds-btn w-full md:w-20 bg-sports-sidebar border border-gray-600 rounded p-1.5 text-center transition flex flex-col items-center justify-center gap-0.5 group/btn" onclick="toggleBet(this)">
+                                    <div class="text-[10px] text-gray-500 group-hover/btn:text-gray-300" data-i18n="label_draw">무</div>
+                                    <div class="font-bold text-sports-accent text-sm">3.60</div>
+                                </button>
+                                <button class="odds-btn w-full md:w-20 bg-sports-sidebar border border-gray-600 rounded p-1.5 text-center transition flex flex-col items-center justify-center gap-0.5 group/btn" onclick="toggleBet(this)">
+                                    <div class="text-[10px] text-gray-500 group-hover/btn:text-gray-300" data-i18n="label_loss">패</div>
+                                    <div class="font-bold text-sports-accent text-sm">2.60</div>
+                                </button>
+                            </div>
+                            <div class="hidden md:block text-xs text-gray-500 text-right w-12 cursor-pointer hover:text-white transition">+215<br><span data-i18n="label_more">더보기</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <footer class="mt-12 pt-12 border-t border-gray-800 text-gray-500 text-xs">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+                        <div>
+                            <h4 class="text-white font-bold mb-4 uppercase" data-i18n="footer_sports">스포츠</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="hover:text-sports-accent transition" data-i18n="sport_soccer">축구</a></li>
+                                <li><a href="#" class="hover:text-sports-accent transition" data-i18n="sport_basketball">농구</a></li>
+                                <li><a href="#" class="hover:text-sports-accent transition" data-i18n="sport_tennis">테니스</a></li>
+                                <li><a href="#" class="hover:text-sports-accent transition" data-i18n="sport_esports">E-스포츠</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-4 uppercase" data-i18n="footer_support">고객 센터</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="hover:text-sports-accent transition" data-i18n="link_guide">이용 가이드</a></li>
+                                <li><a href="#" class="hover:text-sports-accent transition" data-i18n="link_chat">실시간 상담</a></li>
+                                <li><a href="#" class="hover:text-sports-accent transition" data-i18n="link_rules">규정 및 약관</a></li>
+                                <li><a href="#" class="hover:text-sports-accent transition" data-i18n="link_contact">문의하기</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-4 uppercase" data-i18n="footer_company">회사 소개</h4>
+                            <ul class="space-y-2">
+                                <li><a href="#" class="hover:text-sports-accent transition" data-i18n="link_about">About Us</a></li>
+                                <li><a href="#" class="hover:text-sports-accent transition" data-i18n="link_affiliate">파트너 제휴</a></li>
+                                <li><a href="#" class="hover:text-sports-accent transition" data-i18n="link_responsible">도박 중독 예방</a></li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold mb-4 uppercase" data-i18n="footer_payment">결제 수단</h4>
+                            <div class="flex gap-2 flex-wrap">
+                                <div class="w-10 h-6 bg-gray-700 rounded flex items-center justify-center text-[8px] text-white">VISA</div>
+                                <div class="w-10 h-6 bg-gray-700 rounded flex items-center justify-center text-[8px] text-white">BTC</div>
+                                <div class="w-10 h-6 bg-gray-700 rounded flex items-center justify-center text-[8px] text-white">ETH</div>
+                                <div class="w-10 h-6 bg-gray-700 rounded flex items-center justify-center text-[8px] text-white">USDT</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center border-t border-gray-800 pt-8">
+                        <div class="flex justify-center items-center gap-2 mb-2">
+                            <span class="w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center text-[10px]">19+</span>
+                            <span>건전한 베팅 문화를 응원합니다.</span>
+                        </div>
+                        <p>&copy; 2024 BETWIN SPORTS. All rights reserved. Licensed in Curacao.</p>
+                    </div>
+                </footer>
+
+            </div>
+        </main>
+
+        <!-- Right Sidebar (Bet Slip) -->
+        <aside class="w-80 bg-sports-sidebar border-l border-gray-800 hidden lg:flex flex-col shrink-0 z-20 shadow-xl">
+            <div class="h-14 bg-sports-card flex items-center px-4 font-bold text-white border-b border-gray-800 shadow-sm">
+                <span data-i18n="title_bet_slip">베팅 슬립</span> <span class="ml-auto bg-sports-accent text-black text-xs px-2 py-0.5 rounded-full font-bold" id="bet-count">0</span>
+            </div>
+            
+            <div class="flex-1 p-4 overflow-y-auto" id="bet-slip-content">
+                <!-- Empty State -->
+                <div class="text-center text-gray-500 mt-20 flex flex-col items-center">
+                    <svg class="w-12 h-12 text-gray-700 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                    <p class="font-bold" data-i18n="msg_no_bets">베팅 내역이 없습니다</p>
+                    <p class="text-xs mt-1 text-gray-600" data-i18n="msg_select_odds">배당을 선택하여 베팅하세요</p>
+                </div>
+            </div>
+
+            <!-- Bet Controls -->
+            <div class="p-4 bg-sports-card border-t border-gray-800 shadow-[0_-5px_15px_rgba(0,0,0,0.3)]">
+                <div class="flex justify-between text-sm mb-2 text-gray-400">
+                    <span data-i18n="label_total_odds">총 배당</span>
+                    <span class="text-sports-accent font-bold" id="total-odds">0.00</span>
+                </div>
+                <div class="flex justify-between text-sm mb-4 text-gray-400">
+                    <span data-i18n="label_est_return">예상 당첨금</span>
+                    <span class="text-white font-bold">₩ <span id="potential-return">0</span></span>
+                </div>
+                <div class="relative mb-3">
+                    <span class="absolute left-3 top-2.5 text-gray-500">₩</span>
+                    <input type="number" data-i18n-placeholder="placeholder_bet_amount" placeholder="베팅 금액" class="w-full bg-black/30 border border-gray-600 rounded p-2 pl-8 text-white focus:border-sports-accent outline-none transition">
+                </div>
+                <button class="w-full bg-sports-accent text-black font-bold py-3 rounded hover:bg-sports-accentHover transition uppercase tracking-wider shadow-lg" data-i18n="btn_place_bet">베팅 하기</button>
+            </div>
+        </aside>
+
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                nav_live: "LIVE",
+                nav_sports: "SPORTS",
+                nav_casino: "CASINO",
+                nav_poker: "POKER",
+                nav_esports: "E-SPORTS",
+                nav_promo: "PROMO",
+                label_balance: "BALANCE",
+                label_member: "MEM",
+                btn_recharge: "DEPOSIT",
+                search_placeholder: "Search matches...",
+                title_popular_leagues: "POPULAR LEAGUES",
+                league_epl: "Premier League",
+                league_laliga: "La Liga",
+                league_bundesliga: "Bundesliga",
+                league_nba: "NBA",
+                league_mlb: "MLB",
+                title_all_sports: "ALL SPORTS",
+                sport_tennis: "Tennis",
+                sport_esports: "E-Sports",
+                sport_volleyball: "Volleyball",
+                sport_pingpong: "Table Tennis",
+                sport_mma: "MMA/UFC",
+                sport_soccer: "Soccer",
+                sport_basketball: "Basketball",
+                support_24h: "24/7 Support",
+                support_live: "Live Chat",
+                ticker_live: "LIVE",
+                ticker_goal: "GOAL!",
+                ticker_set_end: "SET END:",
+                ticker_3pt: "3-POINT!",
+                ticker_jackpot: "JACKPOT!",
+                ticker_red_card: "RED CARD!",
+                hero_live_now: "Live Now",
+                hero_title_suffix: "SUPER SUNDAY",
+                hero_desc: "Man City vs Liverpool. The title decider.<br>Haaland first goal scorer <span class=\"text-sports-accent\">Odds 5.00 Boost</span>!",
+                btn_bet_now: "BET NOW",
+                btn_view_odds: "VIEW ODDS",
+                tracker_analysis: "MATCH STATS",
+                tracker_records: "RECORDS",
+                tracker_attack: "DANGEROUS ATTACK",
+                tracker_corner: "Corner",
+                tracker_red_card_stat: "Red Card",
+                tracker_possession: "Possession",
+                promo_tag: "LIMITED EVENT",
+                promo_title: "PARLAY<br>BONUS",
+                promo_desc: "Get up to 70% bonus on parlay bets!",
+                btn_get_bonus: "GET BONUS",
+                title_live_matches: "LIVE MATCHES",
+                btn_filter_soccer: "Soccer",
+                btn_filter_basketball: "Basketball",
+                btn_filter_tennis: "Tennis",
+                btn_filter_esports: "E-Sports",
+                label_stats: "Stats",
+                team_man_city: "Man City",
+                team_liverpool: "Liverpool",
+                label_win: "WIN",
+                label_draw: "DRAW",
+                label_loss: "LOSS",
+                label_more: "MORE",
+                team_real_madrid: "Real Madrid",
+                team_barcelona: "Barcelona",
+                team_warriors: "Warriors",
+                team_lakers: "Lakers",
+                title_upcoming: "UPCOMING MATCHES",
+                time_tomorrow_0400: "Tomorrow 04:00",
+                league_champions: "Champions League",
+                label_betting_options: "+215 Markets",
+                team_psg: "PSG",
+                team_bayern: "Bayern",
+                footer_sports: "SPORTS",
+                footer_support: "SUPPORT",
+                link_guide: "Guide",
+                link_chat: "Live Chat",
+                link_rules: "Rules",
+                link_contact: "Contact",
+                footer_company: "COMPANY",
+                link_about: "About Us",
+                link_affiliate: "Affiliates",
+                link_responsible: "Responsible Gaming",
+                footer_payment: "PAYMENT METHODS",
+                msg_responsible: "We support responsible betting.",
+                title_bet_slip: "BET SLIP",
+                msg_no_bets: "No active bets",
+                msg_select_odds: "Select odds to place a bet",
+                label_total_odds: "Total Odds",
+                label_est_return: "Est. Return",
+                placeholder_bet_amount: "Bet Amount",
+                btn_place_bet: "PLACE BET",
+                slip_match_1: "Man City vs Liverpool",
+                slip_match_2: "Real Madrid vs Barcelona",
+                slip_market_home: "1x2 - Home",
+                slip_market_draw: "1x2 - Draw"
+            },
+            ko: {
+                nav_live: "라이브",
+                nav_sports: "스포츠",
+                nav_casino: "카지노",
+                nav_poker: "포커",
+                nav_esports: "E-스포츠",
+                nav_promo: "프로모션",
+                label_balance: "보유머니",
+                label_member: "회원",
+                btn_recharge: "충전하기",
+                search_placeholder: "경기 검색...",
+                title_popular_leagues: "인기 리그",
+                league_epl: "프리미어 리그",
+                league_laliga: "라리가",
+                league_bundesliga: "분데스리가",
+                league_nba: "NBA",
+                league_mlb: "MLB",
+                title_all_sports: "전체 종목",
+                sport_tennis: "테니스",
+                sport_esports: "E-스포츠",
+                sport_volleyball: "배구",
+                sport_pingpong: "탁구",
+                sport_mma: "MMA/UFC",
+                sport_soccer: "축구",
+                sport_basketball: "농구",
+                support_24h: "24시간 고객센터",
+                support_live: "실시간 상담",
+                ticker_live: "실시간 중계",
+                ticker_goal: "골!",
+                ticker_set_end: "세트 종료:",
+                ticker_3pt: "3점슛 성공!",
+                ticker_jackpot: "대박 당첨!",
+                ticker_red_card: "퇴장!",
+                hero_live_now: "Live Now",
+                hero_title_suffix: "SUPER SUNDAY",
+                hero_desc: "맨시티 vs 리버풀. 우승을 향한 결정적 승부.<br>홀란드 선취골 득점 시 <span class=\"text-sports-accent\">배당률 5.00 부스트</span> 제공!",
+                btn_bet_now: "베팅하기",
+                btn_view_odds: "배당 보기",
+                tracker_analysis: "경기 분석",
+                tracker_records: "기록 보기",
+                tracker_attack: "위험한 공격",
+                tracker_corner: "코너킥",
+                tracker_red_card_stat: "레드카드",
+                tracker_possession: "점유율",
+                promo_tag: "한정 이벤트",
+                promo_title: "다폴더<br>보너스",
+                promo_desc: "다폴더 베팅 시 최대 70% 추가 배당 지급!",
+                btn_get_bonus: "보너스 받기",
+                title_live_matches: "진행 중인 경기",
+                btn_filter_soccer: "축구",
+                btn_filter_basketball: "농구",
+                btn_filter_tennis: "테니스",
+                btn_filter_esports: "E-스포츠",
+                label_stats: "통계",
+                team_man_city: "맨시티",
+                team_liverpool: "리버풀",
+                label_win: "승",
+                label_draw: "무",
+                label_loss: "패",
+                label_more: "더보기",
+                team_real_madrid: "레알 마드리드",
+                team_barcelona: "바르셀로나",
+                team_warriors: "워리어스",
+                team_lakers: "레이커스",
+                title_upcoming: "주요 경기 일정",
+                time_tomorrow_0400: "내일 04:00",
+                league_champions: "챔피언스 리그",
+                label_betting_options: "+215 베팅 옵션",
+                team_psg: "파리 생제르맹",
+                team_bayern: "바이에른 뮌헨",
+                footer_sports: "스포츠",
+                footer_support: "고객 센터",
+                link_guide: "이용 가이드",
+                link_chat: "실시간 상담",
+                link_rules: "규정 및 약관",
+                link_contact: "문의하기",
+                footer_company: "회사 소개",
+                link_about: "About Us",
+                link_affiliate: "파트너 제휴",
+                link_responsible: "도박 중독 예방",
+                footer_payment: "결제 수단",
+                msg_responsible: "건전한 베팅 문화를 응원합니다.",
+                title_bet_slip: "베팅 슬립",
+                msg_no_bets: "베팅 내역이 없습니다",
+                msg_select_odds: "배당을 선택하여 베팅하세요",
+                label_total_odds: "총 배당",
+                label_est_return: "예상 당첨금",
+                placeholder_bet_amount: "베팅 금액",
+                btn_place_bet: "베팅 하기",
+                slip_match_1: "맨시티 vs 리버풀",
+                slip_match_2: "레알 마드리드 vs 바르셀로나",
+                slip_market_home: "승무패 - 홈승",
+                slip_market_draw: "승무패 - 무"
+            }
+        };
+
+        let currentLang = 'ko';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+            
+            // Text content
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+
+            // Placeholders
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                if (translations[lang][key]) {
+                    element.placeholder = translations[lang][key];
+                }
+            });
+
+            // Update Bet Slip Content if active
+            const countBadge = document.getElementById('bet-count');
+            if (parseInt(countBadge.innerText) > 0) {
+                 // Trigger re-render of slip content if needed, but for now we rely on user action or simple refresh. 
+                 // However, since we toggle text, we should probably update the slip if it's open.
+                 // For simplicity, we won't force-refresh the slip content here unless we store the state more complexly.
+                 // But we can update the "No bets" message if it's empty.
+            } else {
+                 const slipContent = document.getElementById('bet-slip-content');
+                 slipContent.innerHTML = `
+                    <div class="text-center text-gray-500 mt-20 flex flex-col items-center">
+                        <svg class="w-12 h-12 text-gray-700 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                        <p class="font-bold">${translations[lang].msg_no_bets}</p>
+                        <p class="text-xs mt-1 text-gray-600">${translations[lang].msg_select_odds}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function getLanguage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlLang = urlParams.get('lang');
+            if (urlLang) return urlLang;
+            return localStorage.getItem('lang') || 'ko';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            const lang = getLanguage();
+            setLanguage(lang);
+        });
+
+        function toggleBet(btn) {
+            // Toggle active class
+            btn.classList.toggle('active');
+            
+            // Simulation of bet slip update
+            const countBadge = document.getElementById('bet-count');
+            const currentCount = parseInt(countBadge.innerText);
+            
+            if (btn.classList.contains('active')) {
+                countBadge.innerText = currentCount + 1;
+            } else {
+                countBadge.innerText = Math.max(0, currentCount - 1);
+            }
+
+            // Simple visual feedback
+            const slipContent = document.getElementById('bet-slip-content');
+            if (parseInt(countBadge.innerText) > 0) {
+                slipContent.innerHTML = `
+                    <div class="bg-black/30 p-3 rounded mb-2 border-l-2 border-sports-accent relative group">
+                        <div class="text-xs text-white mb-1 font-bold">${translations[currentLang].slip_match_1}</div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-gray-400">${translations[currentLang].slip_market_home}</span>
+                            <span class="font-bold text-sports-accent">1.85</span>
+                        </div>
+                        <button class="absolute top-1 right-2 text-gray-600 hover:text-white transition">×</button>
+                    </div>
+                    <div class="bg-black/30 p-3 rounded mb-2 border-l-2 border-sports-accent relative group">
+                        <div class="text-xs text-white mb-1 font-bold">${translations[currentLang].slip_match_2}</div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-gray-400">${translations[currentLang].slip_market_draw}</span>
+                            <span class="font-bold text-sports-accent">3.10</span>
+                        </div>
+                        <button class="absolute top-1 right-2 text-gray-600 hover:text-white transition">×</button>
+                    </div>
+                `;
+                document.getElementById('total-odds').innerText = '5.73';
+                document.getElementById('potential-return').innerText = '57,350';
+            } else {
+                slipContent.innerHTML = `
+                     <div class="text-center text-gray-500 mt-20 flex flex-col items-center">
+                        <svg class="w-12 h-12 text-gray-700 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                        <p class="font-bold">${translations[currentLang].msg_no_bets}</p>
+                        <p class="text-xs mt-1 text-gray-600">${translations[currentLang].msg_select_odds}</p>
+                    </div>
+                `;
+                document.getElementById('total-odds').innerText = '0.00';
+                document.getElementById('potential-return').innerText = '0';
+            }
+        }
+    </script>
+</body>
+</html>

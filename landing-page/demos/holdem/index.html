@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+    <title>ROYAL FLUSH | Elite Poker Room</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        felt: {
+                            light: '#2d5a27',
+                            DEFAULT: '#1e3c1b',
+                            dark: '#0f1f0e',
+                        },
+                        gold: {
+                            100: '#fbf5d4',
+                            300: '#e8c76d',
+                            500: '#c5a028',
+                            700: '#8e7015',
+                            900: '#4d3b0b',
+                        },
+                        card: {
+                            red: '#e63946',
+                            black: '#1d3557'
+                        }
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        lato: ['Lato', 'sans-serif']
+                    },
+                    backgroundImage: {
+                        'poker-pattern': "url('https://www.transparenttextures.com/patterns/felt.png')",
+                        'luxury-gradient': "radial-gradient(circle at center, #2d5a27 0%, #0f1f0e 100%)"
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Lato', sans-serif; background-color: #0f1f0e; color: #e8c76d; }
+        h1, h2, h3, .font-cinzel { font-family: 'Cinzel', serif; }
+        
+        .gold-gradient-text {
+            background: linear-gradient(to bottom, #fbf5d4, #c5a028, #8e7015);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+        
+        .gold-border {
+            border: 2px solid #c5a028;
+            box-shadow: 0 0 15px rgba(197, 160, 40, 0.3), inset 0 0 15px rgba(197, 160, 40, 0.3);
+        }
+
+        .felt-bg {
+            background-color: #1e3c1b;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%232d5a27' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .card-anim { transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .card-anim:hover { transform: translateY(-10px) rotate(2deg); }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+</head>
+<body class="bg-luxury-gradient min-h-screen flex flex-col no-scrollbar">
+
+    <!-- Top Bar -->
+    <div class="bg-black/80 text-center py-1 border-b border-gold-900">
+        <p class="text-xs text-gold-300 tracking-widest" data-i18n="top_bar">THE WORLD'S MOST EXCLUSIVE HIGH-STAKES POKER ROOM</p>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="container mx-auto px-6 py-6 flex justify-between items-center relative z-20">
+        <div class="flex items-center gap-4">
+            <!-- Logo -->
+            <div class="w-12 h-12 bg-gold-500 rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(197,160,40,0.6)]">
+                <span class="text-3xl">♠️</span>
+            </div>
+            <div class="text-2xl font-cinzel font-black tracking-widest text-white">
+                ROYAL <span class="text-gold-500">FLUSH</span>
+            </div>
+        </div>
+        
+        <div class="hidden md:flex gap-10 text-gold-100 font-bold tracking-widest text-sm">
+            <a href="#" class="hover:text-gold-500 transition border-b-2 border-transparent hover:border-gold-500 pb-1" data-i18n="nav_lobby">LOBBY</a>
+            <a href="#" class="hover:text-gold-500 transition border-b-2 border-transparent hover:border-gold-500 pb-1" data-i18n="nav_tournaments">TOURNAMENTS</a>
+            <a href="#" class="hover:text-gold-500 transition border-b-2 border-transparent hover:border-gold-500 pb-1" data-i18n="nav_vip">VIP SOCIETY</a>
+            <a href="#" class="hover:text-gold-500 transition border-b-2 border-transparent hover:border-gold-500 pb-1" data-i18n="nav_banking">BANKING</a>
+        </div>
+
+        <button class="bg-gradient-to-b from-gold-300 to-gold-700 text-black font-bold px-8 py-2 rounded-sm border border-gold-100 hover:brightness-110 transition shadow-lg" data-i18n="btn_login">
+            LOGIN
+        </button>
+    </nav>
+
+    <!-- Main Hero -->
+    <main class="flex-1 container mx-auto px-6 flex flex-col md:flex-row items-center justify-center gap-12 relative py-12">
+        
+        <!-- Left Content -->
+        <div class="flex-1 text-center md:text-left z-10">
+            <div class="inline-block bg-black/40 border border-gold-700 rounded-full px-4 py-1 text-xs text-gold-300 mb-6 tracking-widest" data-i18n="hero_badge">
+                🏆 NEW SEASON: $10M GTD SERIES
+            </div>
+            <h1 class="text-5xl md:text-7xl font-cinzel font-black text-white mb-6 leading-tight drop-shadow-2xl">
+                <span data-i18n="hero_claim">CLAIM YOUR</span> <br>
+                <span class="gold-gradient-text" data-i18n="hero_throne">THROUGH</span>
+            </h1>
+            <p class="text-gold-100/80 text-lg mb-10 max-w-xl font-light leading-relaxed">
+                <span data-i18n="hero_desc">Experience the thrill of true high-stakes poker. RNG Certified. Secure Deposits.</span> 
+                <strong class="text-white" data-i18n="hero_cta">Join the elite today.</strong>
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                <button class="bg-red-800 hover:bg-red-700 text-white font-bold text-xl px-10 py-4 rounded shadow-[0_10px_20px_rgba(0,0,0,0.5)] border-b-4 border-red-900 transition transform active:translate-y-1" data-i18n="btn_download">
+                    DOWNLOAD CLIENT
+                </button>
+                <button class="bg-transparent border-2 border-gold-500 text-gold-300 font-bold text-xl px-10 py-4 rounded hover:bg-gold-500/10 transition" data-i18n="btn_instant">
+                    INSTANT PLAY
+                </button>
+            </div>
+            
+            <div class="mt-8 flex items-center justify-center md:justify-start gap-6 opacity-70">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Apple_logo_black.svg/1667px-Apple_logo_black.svg.png" class="h-6 invert">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_Play_2022_icon.svg/1200px-Google_Play_2022_icon.svg.png" class="h-6 filter grayscale invert">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Windows_logo_-_2012_%28dark_blue%29.svg/2048px-Windows_logo_-_2012_%28dark_blue%29.svg.png" class="h-5 invert">
+            </div>
+        </div>
+
+        <!-- Right Content (Visual) -->
+        <div class="flex-1 relative w-full max-w-lg">
+            <!-- Decorative Cards -->
+            <div class="relative w-full aspect-[4/5]">
+                <div class="absolute top-10 left-10 w-48 h-72 bg-white rounded-xl shadow-2xl transform -rotate-12 border-8 border-white card-anim z-10 flex flex-col items-center justify-between p-4">
+                    <div class="text-red-600 text-4xl font-bold self-start">A<br>♥</div>
+                    <div class="text-red-600 text-8xl">♥</div>
+                    <div class="text-red-600 text-4xl font-bold self-end rotate-180">A<br>♥</div>
+                </div>
+                <div class="absolute top-0 right-10 w-48 h-72 bg-white rounded-xl shadow-2xl transform rotate-6 border-8 border-white card-anim z-20 flex flex-col items-center justify-between p-4">
+                    <div class="text-black text-4xl font-bold self-start">K<br>♠</div>
+                    <div class="text-black text-8xl">♠</div>
+                    <div class="text-black text-4xl font-bold self-end rotate-180">K<br>♠</div>
+                </div>
+                
+                <!-- Floating Chips -->
+                <div class="absolute bottom-20 left-0 w-20 h-20 rounded-full border-4 border-dashed border-white bg-red-600 shadow-xl flex items-center justify-center text-white font-bold transform -rotate-12 z-30">
+                    $500
+                </div>
+                <div class="absolute bottom-10 right-20 w-24 h-24 rounded-full border-4 border-dashed border-white bg-black shadow-xl flex items-center justify-center text-gold-500 font-bold transform rotate-12 z-30">
+                    $1k
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Ticker -->
+    <div class="bg-black py-3 border-y border-gold-900 overflow-hidden relative">
+        <div class="flex gap-12 whitespace-nowrap animate-marquee text-sm font-bold text-gold-300">
+            <span>🏆 <span data-i18n="ticker_badbeat">BAD BEAT JACKPOT:</span> <span class="text-white">$1,240,593</span></span>
+            <span>♠️ <span data-i18n="ticker_winner">RECENT WINNER:</span> Player88** won $54,000 in PLO</span>
+            <span>♣️ <span data-i18n="ticker_wsop">WSOP SATELLITE:</span> <span data-i18n="ticker_reg_close">Registration Closes in 20m</span></span>
+            <span>♦️ <span data-i18n="ticker_highroller">HIGH ROLLER:</span> <span data-i18n="ticker_table">Table 4 - Pot Size</span> $230,000</span>
+            <span>🏆 <span data-i18n="ticker_badbeat">BAD BEAT JACKPOT:</span> <span class="text-white">$1,240,593</span></span>
+            <span>♠️ <span data-i18n="ticker_winner">RECENT WINNER:</span> Player88** won $54,000 in PLO</span>
+        </div>
+    </div>
+    <style>
+        .animate-marquee { animation: marquee 20s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    </style>
+
+    <!-- Game Types -->
+    <section class="bg-felt-bg py-20 relative shadow-[inset_0_0_100px_rgba(0,0,0,0.8)]">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-cinzel text-center text-white mb-12 flex items-center justify-center gap-4">
+                <span class="h-px w-20 bg-gold-500"></span>
+                <span data-i18n="section_choose_table">CHOOSE YOUR TABLE</span>
+                <span class="h-px w-20 bg-gold-500"></span>
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div class="bg-black/40 border border-gold-900/50 p-8 rounded-lg hover:bg-black/60 transition group cursor-pointer text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                    <div class="relative z-10">
+                        <div class="text-5xl mb-4 group-hover:scale-110 transition duration-500">🔥</div>
+                        <h3 class="text-2xl font-bold text-gold-300 mb-2" data-i18n="card1_title">Texas Hold'em</h3>
+                        <p class="text-sm text-gray-400 mb-6" data-i18n="card1_desc">No Limit & Fixed Limit. <br>Blinds from $0.10/$0.20 to $500/$1000.</p>
+                        <span class="text-xs uppercase tracking-widest text-white border border-white/20 px-4 py-2 rounded group-hover:bg-gold-500 group-hover:text-black group-hover:border-gold-500 transition" data-i18n="btn_join">Join Table</span>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="bg-black/40 border border-gold-900/50 p-8 rounded-lg hover:bg-black/60 transition group cursor-pointer text-center relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold px-2 py-1 uppercase" data-i18n="badge_hot">Hot</div>
+                    <div class="relative z-10">
+                        <div class="text-5xl mb-4 group-hover:scale-110 transition duration-500">🌪️</div>
+                        <h3 class="text-2xl font-bold text-gold-300 mb-2" data-i18n="card2_title">Spin & Go</h3>
+                        <p class="text-sm text-gray-400 mb-6" data-i18n="card2_desc">3-Player Hyper Turbo. <br>Win up to 10,000x your buy-in in minutes.</p>
+                        <span class="text-xs uppercase tracking-widest text-white border border-white/20 px-4 py-2 rounded group-hover:bg-gold-500 group-hover:text-black group-hover:border-gold-500 transition" data-i18n="btn_play_now">Play Now</span>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="bg-black/40 border border-gold-900/50 p-8 rounded-lg hover:bg-black/60 transition group cursor-pointer text-center relative overflow-hidden">
+                    <div class="relative z-10">
+                        <div class="text-5xl mb-4 group-hover:scale-110 transition duration-500">💎</div>
+                        <h3 class="text-2xl font-bold text-gold-300 mb-2" data-i18n="card3_title">Omaha</h3>
+                        <p class="text-sm text-gray-400 mb-6" data-i18n="card3_desc">PLO & PLO8. <br>More cards, more action. High variance thrill.</p>
+                        <span class="text-xs uppercase tracking-widest text-white border border-white/20 px-4 py-2 rounded group-hover:bg-gold-500 group-hover:text-black group-hover:border-gold-500 transition" data-i18n="btn_join">Join Table</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black py-12 border-t border-gold-900 text-center">
+        <div class="container mx-auto px-6">
+            <div class="text-2xl font-cinzel font-black tracking-widest text-gray-600 mb-8">
+                ROYAL FLUSH
+            </div>
+            <div class="flex justify-center gap-8 mb-8 grayscale opacity-40">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/1280px-MasterCard_Logo.svg.png" class="h-8">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" class="h-8">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1200px-Bitcoin.svg.png" class="h-8">
+            </div>
+            <div class="text-xs text-gray-600 max-w-2xl mx-auto leading-relaxed">
+                <span data-i18n="footer_license">Royal Flush Poker is licensed and regulated by the Isle of Man Gambling Supervision Commission.</span> 
+                <span data-i18n="footer_risk">Gambling involves risk. Please gamble responsibly. 18+ Only.</span>
+                <br><br>
+                <span data-i18n="footer_copyright">&copy; 2024 Royal Flush Entertainment.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const translations = {
+            en: {
+                top_bar: "THE WORLD'S MOST EXCLUSIVE HIGH-STAKES POKER ROOM",
+                nav_lobby: "LOBBY",
+                nav_tournaments: "TOURNAMENTS",
+                nav_vip: "VIP SOCIETY",
+                nav_banking: "BANKING",
+                btn_login: "LOGIN",
+                hero_badge: "🏆 NEW SEASON: $10M GTD SERIES",
+                hero_claim: "CLAIM YOUR",
+                hero_throne: "THROUGH",
+                hero_desc: "Experience the thrill of true high-stakes poker. RNG Certified. Secure Deposits.",
+                hero_cta: "Join the elite today.",
+                btn_download: "DOWNLOAD CLIENT",
+                btn_instant: "INSTANT PLAY",
+                ticker_badbeat: "BAD BEAT JACKPOT:",
+                ticker_winner: "RECENT WINNER:",
+                ticker_wsop: "WSOP SATELLITE:",
+                ticker_reg_close: "Registration Closes in 20m",
+                ticker_highroller: "HIGH ROLLER:",
+                ticker_table: "Table 4 - Pot Size",
+                section_choose_table: "CHOOSE YOUR TABLE",
+                card1_title: "Texas Hold'em",
+                card1_desc: "No Limit & Fixed Limit. <br>Blinds from $0.10/$0.20 to $500/$1000.",
+                btn_join: "Join Table",
+                badge_hot: "Hot",
+                card2_title: "Spin & Go",
+                card2_desc: "3-Player Hyper Turbo. <br>Win up to 10,000x your buy-in in minutes.",
+                btn_play_now: "Play Now",
+                card3_title: "Omaha",
+                card3_desc: "PLO & PLO8. <br>More cards, more action. High variance thrill.",
+                footer_license: "Royal Flush Poker is licensed and regulated by the Isle of Man Gambling Supervision Commission.",
+                footer_risk: "Gambling involves risk. Please gamble responsibly. 18+ Only.",
+                footer_copyright: "&copy; 2024 Royal Flush Entertainment."
+            },
+            ko: {
+                top_bar: "세계에서 가장 독점적인 하이 스테이크 포커 룸",
+                nav_lobby: "로비",
+                nav_tournaments: "토너먼트",
+                nav_vip: "VIP 소사이어티",
+                nav_banking: "뱅킹",
+                btn_login: "로그인",
+                hero_badge: "🏆 새 시즌: $1,000만 GTD 시리즈",
+                hero_claim: "당신의 자리를",
+                hero_throne: "차지하세요",
+                hero_desc: "진정한 하이 스테이크 포커의 전율을 경험하세요. RNG 인증. 안전한 입출금.",
+                hero_cta: "지금 엘리트와 함께하세요.",
+                btn_download: "클라이언트 다운로드",
+                btn_instant: "즉시 플레이",
+                ticker_badbeat: "배드 비트 잭팟:",
+                ticker_winner: "최근 우승자:",
+                ticker_wsop: "WSOP 위성 토너먼트:",
+                ticker_reg_close: "등록 마감 20분 전",
+                ticker_highroller: "하이 롤러:",
+                ticker_table: "테이블 4 - 팟 규모",
+                section_choose_table: "테이블 선택",
+                card1_title: "텍사스 홀덤",
+                card1_desc: "노 리밋 & 픽스드 리밋. <br>블라인드 $0.10/$0.20 부터 $500/$1000 까지.",
+                btn_join: "테이블 입장",
+                badge_hot: "인기",
+                card2_title: "스핀 & 고",
+                card2_desc: "3인 하이퍼 터보. <br>몇 분 만에 바이인의 최대 10,000배 획득.",
+                btn_play_now: "지금 플레이",
+                card3_title: "오마하",
+                card3_desc: "PLO & PLO8. <br>더 많은 카드, 더 많은 액션. 높은 변동성의 스릴.",
+                footer_license: "Royal Flush Poker는 Isle of Man Gambling Supervision Commission의 라이선스 및 규제를 받습니다.",
+                footer_risk: "도박에는 위험이 따릅니다. 책임감 있게 즐기세요. 19세 이상.",
+                footer_copyright: "&copy; 2024 Royal Flush Entertainment."
+            }
+        };
+
+        function setLanguage(lang) {
+            document.documentElement.lang = lang;
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const langParam = urlParams.get('lang');
+        const savedLang = localStorage.getItem('lang') || 'ko';
+        const initialLang = langParam || savedLang;
+
+        if (initialLang) {
+            setLanguage(initialLang);
+        }
+    </script>
+</body>
+</html>
